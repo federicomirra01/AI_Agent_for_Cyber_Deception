@@ -1,44 +1,41 @@
 {
-  "epoch_number": 1,
-  "start_time": 1760626291.7090101,
-  "end_time": 1760626329.9632435,
+  "epoch_number": 2,
+  "start_time": 1760638239.1284935,
+  "end_time": 1760638278.7471745,
   "phase_timings": {
-    "initialization": 1760626291.7090266,
-    "attack_execution": 1760626291.7190268,
-    "monitoring_accumulation": 1760626308.7912407,
-    "agent_analysis": 1760626318.791872,
-    "firewall_update_wait": 1760626327.9502947,
-    "metrics_collection": 1760626329.9515715,
-    "epoch_complete": 1760626329.9626887
+    "initialization": 1760638239.1285071,
+    "attack_execution": 1760638239.1401918,
+    "monitoring_accumulation": 1760638254.8283374,
+    "agent_analysis": 1760638264.8291805,
+    "firewall_update_wait": 1760638276.7333007,
+    "metrics_collection": 1760638278.734413,
+    "epoch_complete": 1760638278.7463114
   },
-  "services_detected": [],
+  "services_detected": [
+    "HTTP(172.20.0.10:80)"
+  ],
   "services_successfully_exploited": [],
   "exploits_attempted": [],
   "flags_captured": [],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [
-    {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.10 (tcp)"
-    },
-    {
-      "rules_added_current_epoch": "ALLOW 172.20.0.10 -> 192.168.100.0/24 (tcp)"
-    }
-  ],
+  "firewall_rules_added": [],
   "firewall_rules_removed": [],
   "honeypots_exposed": {
     "ip": "172.20.0.10",
     "service": "cve-2021-22205-gitlab-1-proxy",
-    "current_level": 0,
-    "epoch": 1
+    "current_level": 25,
+    "epoch": 2
   },
   "honeypots_exploitation": [
     {
       "ip": "172.20.0.10",
       "service": "cve-2021-22205-gitlab-1-proxy",
       "level_prev": 0,
-      "level_new": 0,
-      "changed": false,
-      "evidence_quotes": []
+      "level_new": 25,
+      "changed": true,
+      "evidence_quotes": [
+        "POSSBL PORT SCAN (NMAP -sS)"
+      ]
     },
     {
       "ip": "172.20.0.3",
@@ -66,7 +63,22 @@
     }
   ],
   "inferred_attack_graph": {
-    "edges": [],
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      }
+    ],
     "interesting": []
   },
   "service_epoch_context": [],

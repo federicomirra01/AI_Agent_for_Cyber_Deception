@@ -1,15 +1,15 @@
 {
-  "epoch_number": 2,
-  "start_time": 1760626330.9671075,
-  "end_time": 1760626394.957788,
+  "epoch_number": 3,
+  "start_time": 1760638279.7504258,
+  "end_time": 1760638327.5471063,
   "phase_timings": {
-    "initialization": 1760626330.9671347,
-    "attack_execution": 1760626330.978094,
-    "monitoring_accumulation": 1760626354.365053,
-    "agent_analysis": 1760626364.3661337,
-    "firewall_update_wait": 1760626392.9480257,
-    "metrics_collection": 1760626394.949121,
-    "epoch_complete": 1760626394.9572253
+    "initialization": 1760638279.7504365,
+    "attack_execution": 1760638279.7606454,
+    "monitoring_accumulation": 1760638302.9845104,
+    "agent_analysis": 1760638312.98558,
+    "firewall_update_wait": 1760638325.5304415,
+    "metrics_collection": 1760638327.5323954,
+    "epoch_complete": 1760638327.546064
   },
   "services_detected": [
     "HTTP(172.20.0.10:80)"
@@ -18,24 +18,36 @@
   "exploits_attempted": [],
   "flags_captured": [],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [],
-  "firewall_rules_removed": [],
+  "firewall_rules_added": [
+    {
+      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
+    },
+    {
+      "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
+    }
+  ],
+  "firewall_rules_removed": [
+    {
+      "rules_removed_current_epoch": [
+        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.10          192.168.100.0/24",
+        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.10"
+      ]
+    }
+  ],
   "honeypots_exposed": {
-    "ip": "172.20.0.10",
-    "service": "cve-2021-22205-gitlab-1-proxy",
-    "current_level": 25,
-    "epoch": 2
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
+    "current_level": 0,
+    "epoch": 3
   },
   "honeypots_exploitation": [
     {
       "ip": "172.20.0.10",
       "service": "cve-2021-22205-gitlab-1-proxy",
-      "level_prev": 0,
+      "level_prev": 25,
       "level_new": 25,
-      "changed": true,
-      "evidence_quotes": [
-        "ET SCAN Suspicious inbound to mySQL port 3306"
-      ]
+      "changed": false,
+      "evidence_quotes": []
     },
     {
       "ip": "172.20.0.3",
@@ -71,7 +83,7 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "ET SCAN Suspicious inbound to mySQL port 3306"
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           }
         ],
@@ -89,7 +101,7 @@
       "port": "80",
       "url": "http://172.20.0.10:80",
       "version": "13.12.3",
-      "first_exposed_epoch": 2,
+      "first_exposed_epoch": 3,
       "local_epoch": 1,
       "allowed_phase": "initial-access/rce"
     }

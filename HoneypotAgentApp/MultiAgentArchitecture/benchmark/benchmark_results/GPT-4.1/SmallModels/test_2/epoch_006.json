@@ -1,0 +1,143 @@
+{
+  "epoch_number": 6,
+  "start_time": 1760638428.591251,
+  "end_time": 1760638473.514865,
+  "phase_timings": {
+    "initialization": 1760638428.5912983,
+    "attack_execution": 1760638428.604237,
+    "monitoring_accumulation": 1760638448.9424284,
+    "agent_analysis": 1760638458.944067,
+    "firewall_update_wait": 1760638471.501715,
+    "metrics_collection": 1760638473.5036232,
+    "epoch_complete": 1760638473.5142007
+  },
+  "services_detected": [
+    "DOCKER(172.20.0.2:2375)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [
+    "DOCKER(172.20.0.2:2375)"
+  ],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "honeypots_exposed": {
+    "ip": "172.20.0.2",
+    "service": "unauthorized-rce-docker-1",
+    "current_level": 25,
+    "epoch": 6
+  },
+  "honeypots_exploitation": [
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 100,
+      "level_new": 100,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.2",
+      "service": "unauthorized-rce-docker-1",
+      "level_prev": 0,
+      "level_new": 25,
+      "changed": true,
+      "evidence_quotes": [
+        "POSSBL PORT SCAN (NMAP -sS)"
+      ]
+    },
+    {
+      "ip": "172.20.0.7",
+      "service": "xdebug-rce-xdebug2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.3",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "inferred from later phase: ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt"
+            ]
+          },
+          {
+            "phase": "data-exfil-root",
+            "evidence_quotes": [
+              "find / -type f -name 'root.txt' 2>/dev/null\ncat /root/root.txt\n"
+            ]
+          }
+        ],
+        "current_phase": "data-exfil-root",
+        "vector": "data-exfil-root"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.2",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      }
+    ],
+    "interesting": [
+      {
+        "ip": "172.20.0.3",
+        "service": "s2-057-struts2-1"
+      }
+    ]
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "docker:172.20.0.2:2375",
+      "service": "docker",
+      "host": "172.20.0.2",
+      "port": "2375",
+      "first_exposed_epoch": 6,
+      "local_epoch": 1,
+      "allowed_phase": "initial-access/rce"
+    }
+  ],
+  "lockdown_activated": false
+}

@@ -48,8 +48,8 @@ class EpochMetrics:
     # Agent metrics
     firewall_rules_added: List[str] = field(default_factory=list)
     firewall_rules_removed: List[int] = field(default_factory=list)
-    honeypots_exposed: List[Dict[str, Any]] = field(default_factory=list)
-    honeypots_exploitation: Dict[str, float] = field(default_factory=dict)
+    selected_container: List[Dict[str, Any]] = field(default_factory=list)
+    containers_exploitation: Dict[str, float] = field(default_factory=dict)
     inferred_attack_graph: Dict[str, Any] = field(default_factory=dict)
     service_epoch_context: List[Dict[str, Any]] = field(default_factory=list)
       
@@ -76,7 +76,7 @@ class BenchmarkConfig:
     
     # Network configuration
     attacker_network: str = "192.168.100.0/24"
-    honeypot_network: str = "172.20.0.0/24"
+    containers_network: str = "172.20.0.0/24"
     firewall_api_url: str = "http://192.168.200.2:5000"
     
     # Benchmark modes
@@ -349,8 +349,8 @@ class MetricsCollector:
         metrics = {
             "rules_added": [],
             "rules_removed": [],
-            "honeypots_exposed": "",
-            "honeypots_exploitation": {},
+            "selected_container": "",
+            "containers_exploitation": {},
             "lockdown_activated": False,
             "inferred_attack_graph": {}
         }
@@ -374,11 +374,11 @@ class MetricsCollector:
             if 'rules_removed' in iteration_data:
                 metrics["rules_removed"] = iteration_data.get('rules_removed', ["No rules detected"])
 
-            if 'honeypots_exploitation' in iteration_data:
-                metrics["honeypots_exploitation"] = iteration_data.get('honeypots_exploitation', ["No progressions detected"])
+            if 'containers_exploitation' in iteration_data:
+                metrics["containers_exploitation"] = iteration_data.get('containers_exploitation', ["No progressions detected"])
 
-            if 'currently_exposed' in iteration_data:
-                metrics["honeypots_exposed"] = iteration_data.get('currently_exposed', ["No honeypots exposed"])
+            if 'selected_container' in iteration_data:
+                metrics["selected_container"] = iteration_data.get('selected_container', ["No container exposed"])
 
             if 'lockdown_status' in iteration_data:
                 metrics["lockdown_activated"] = iteration_data['lockdown_status']
@@ -527,9 +527,9 @@ class BenchmarkOrchestrator:
                 agent_metrics = self.metrics_collector.parse_agent_metrics()
                 
                 # Update epoch metrics
-                epoch_metrics.honeypots_exploitation = agent_metrics["honeypots_exploitation"]
+                epoch_metrics.containers_exploitation = agent_metrics["containers_exploitation"]
                 epoch_metrics.lockdown_activated = agent_metrics["lockdown_activated"]
-                epoch_metrics.honeypots_exposed = agent_metrics["honeypots_exposed"]
+                epoch_metrics.selected_container = agent_metrics["selected_container"]
                 epoch_metrics.firewall_rules_added = agent_metrics["rules_added"]
                 epoch_metrics.firewall_rules_removed = agent_metrics["rules_removed"]
                 epoch_metrics.inferred_attack_graph = agent_metrics["inferred_attack_graph"]
@@ -712,7 +712,7 @@ class BenchmarkRunner:
                 "average_epoch_duration": sum(e.end_time - e.start_time for e in epochs_data) / len(epochs_data),
                 "lockdown_triggered": any(e.lockdown_activated for e in epochs_data),
                 "lockdown_epoch": next((e.epoch_number for e in epochs_data if e.lockdown_activated), None),
-                "final_honeypots_exploitation": epochs_data[-1].honeypots_exploitation,
+                "final_containers_exploitation": epochs_data[-1].containers_exploitation,
                 "final_inferred_attack_graph": epochs_data[-1].inferred_attack_graph 
             }
         except Exception as e:
