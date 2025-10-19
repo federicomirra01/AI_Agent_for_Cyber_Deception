@@ -9,14 +9,14 @@ import instructor
 from openai import OpenAI
 from typing import List, Dict, Any
 
-class StructuredOutput(BaseModel):
-    reasoning: str 
-    selected_honeypot: dict
-    lockdown: bool = False
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+class StructuredOutput(BaseModel):
+    reasoning: str 
+    selected_container: dict
+    lockdown: bool = False
 
 def _extract_exposure_registry(last_epochs: List[Any]) -> Dict[str, Dict[str, Any]]:
     registry = {}
@@ -30,9 +30,9 @@ def _extract_exposure_registry(last_epochs: List[Any]) -> Dict[str, Dict[str, An
 
 
 
-async def exposure_manager(state: state.HoneypotStateReact, config):
+async def exposure_manager(state: state.AgentState, config):
     """
-    Decides which honeypot(s) to expose next based on current attack graph
+    Decides which container(s) to expose next based on current attack graph
     """
     logger.info("Exploitation Agent")
 
@@ -49,12 +49,12 @@ async def exposure_manager(state: state.HoneypotStateReact, config):
     logger.info(f"Using: {model_name}")
     message = ""
     try:
-        response = StructuredOutput(reasoning="", selected_honeypot={})
+        response = StructuredOutput(reasoning="", selected_container={})
         messages = [
             {"role":"system", "content": exposure_manager_prompt.SYSTEM_PROMPT},
             {"role" : "user", "content" : exposure_manager_prompt.USER_PROMPT.substitute(
-                available_honeypots=state.honeypot_config,
-                honeypots_exploitations=state.honeypots_exploitation,
+                vulnerable_containers=state.vulnerable_containers,
+                containers_exploitation=state.containers_exploitation,
                 exposure_registry=exposure_registry
             )}
         ]
@@ -76,7 +76,7 @@ async def exposure_manager(state: state.HoneypotStateReact, config):
                     valid_json = True
                 except ValidationError as e:
                     logger.error(f"Schema validation failed: \n{e}")
-                    response = StructuredOutput(reasoning="", selected_honeypot={})
+                    response = StructuredOutput(reasoning="", selected_container={})
             return
         elif version == '4.1':
             agent = instructor.from_openai(OpenAI(api_key=OPEN_AI_KEY))
@@ -89,13 +89,12 @@ async def exposure_manager(state: state.HoneypotStateReact, config):
         
         
         message += f"Reasoning: {str(response.reasoning)}" + "\n"
-        message += f"Selected Honeypot: {str(response.selected_honeypot)}" + "\n"
+        message += f"Selected Container: {str(response.selected_container)}" + "\n"
         message += f"Lockdown: {str(response.lockdown)}"
         message = AIMessage(content=message)
         return {
             "messages": [message],
-            "reasoning_exploitation": response.reasoning,
-            "currently_exposed":response.selected_honeypot,
+            "selected_container":response.selected_container,
             "lockdown_status":response.lockdown
             }
     except BadRequestError as e:

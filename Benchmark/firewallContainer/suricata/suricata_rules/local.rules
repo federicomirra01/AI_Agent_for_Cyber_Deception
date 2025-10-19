@@ -49,7 +49,7 @@ alert tcp any any -> any any (msg:"User-Level File Discovery";content:"/home/"; 
 
 #alert tcp any any -> any any (msg:"Root-Level File Discovery";pcre:"/find\s+[^\s]*\s+-type\s+f\s+-name\s+['\"]?root\.txt['\"]?.*2>\s*\/dev\/null/i";classtype:attempted-recon;priority:1;sid:9100003; rev:1;)
 
-alert tcp any any -> any any (msg:"Root-Level File Access)";content:"/root/"; nocase; pcre:"/\/root(\/|\b)/i";sid:9100006; priority:1; rev:1;)
+alert tcp any any -> any any (msg:"Root-Level File Access";content:"/root/"; nocase; pcre:"/\/root(\/|\b)/i";sid:9100006; priority:1; rev:1;)
 
 alert tcp any any -> any any (msg:"SUID Binary Enumeration Detected";pcre:"/find\s+[^\s]*\s+-perm\s+-?4000\s+-type\s+f/i";classtype:attempted-recon;priority:1;sid:9100004; rev:1;)
 

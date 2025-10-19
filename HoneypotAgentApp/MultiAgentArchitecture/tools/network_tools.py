@@ -27,6 +27,7 @@ async def get_alerts(time_window: int = 5) -> Dict[str, Any]:
         alerts = result['data']
     else:
         logger.error(f"Failed to get Suricata alerts: {result['error']}")
+        
     return {'security_events' : alerts}
 
 # Retrieve Fast Alerts from fast.log
@@ -111,51 +112,7 @@ def get_docker_containers() -> Dict[str, Any]:
             }
             container_info.append(info)
             
-        return {'honeypot_config' : container_info}
+        return {'vulnerable_containers' : container_info}
         
     except Exception as e:
         return {"error": f"Unexpected error: {str(e)}"}
-
-def save_iteration_summary(
-    currently_exposed: str = "",
-    evidence_summary: str = "",
-    justification: str = "",
-    honeypots_exploitation: Dict[str, Dict[str, Any]] = {},  # IP -> {percentage: float, service: str, status: str}
-    decision_rationale: str = "",
-    next_iteration_guidance: str = "",
-    lockdown_status: str = "INACTIVE",
-    inferred_attack_graph: Dict[str, Any] = {},
-    exploitation_strategy: str=""
-) -> Dict[str, Any]:
-    """
-    Save iteration summary with structured data for benchmark metrics collection.
-    
-    Args:
-        currently_exposed: IP:PORT or "NONE" if lockdown
-        evidence_summary: Brief description of compromise evidence
-        justification: Why these rules were necessary
-        honeypots_exploitation: Dict mapping IPs to {percentage, service, status}
-        decision_rationale: Strategic decision explanation
-        next_iteration_guidance: What to monitor/act upon next
-        lockdown_status: ACTIVE/INACTIVE
-        inferred_attack_graph: Dict representing the inferred attack graph structure
-        exploitation_strategy: exploitation strategy that the firewall agent needs to follow
-    Returns:
-        Dict with success status and iteration info
-    """
-    iteration_data = {
-        "currently_exposed": currently_exposed,
-        "honeypots_exploitation": honeypots_exploitation,
-        "decision_rationale": decision_rationale,
-        "lockdown_status": lockdown_status,
-
-        "evidence_summary": evidence_summary,
-        "justification": justification,
-        "next_iteration_guidance": next_iteration_guidance,
-        "inferred_attack_graph": inferred_attack_graph,
-        "exploitation_strategy": exploitation_strategy
-    }
-
-
-    return iteration_data
-

@@ -8,11 +8,11 @@ class EpisodicMemory:
 
     def __init__(self):
         self.store = InMemoryStore()
-        self.namespace = ("honeypot", "episodes")
-        self.meta_namespace = ("honeypot", "meta")
+        self.namespace = ("container", "episodes")
+        self.meta_namespace = ("container", "meta")
         self.iteration_counter = 0
 
-    def save_iteration(self, data: str) -> str:
+    def save_iteration(self, data: dict) -> str:
         """Save the last message from current iteration"""
         self.iteration_counter += 1
         iteration_id = f"iteration_{self.iteration_counter }"
@@ -63,7 +63,7 @@ class EpisodicMemory:
                 latest = 0
 
 
-            return latest 
+            return int(latest) 
         except Exception as e:
             print(f"Error retrieving iteration count: {e}")
             return 0

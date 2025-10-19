@@ -9,10 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 def _extract_epoch_from_item(item: Dict[str, Any]) -> int:
-    # Prefer top-level "epoch"; else from currently_exposed.epoch; else 0.
+    # Prefer top-level "epoch"; else from selected_container.epoch; else 0.
     if item.get("epoch") is not None:
         return int(item["epoch"])
-    ce = item.get("currently_exposed") or {}
+    ce = item.get("selected_container") or {}
     if ce.get("epoch") is not None:
         return int(ce["epoch"])
     return 0
@@ -36,7 +36,7 @@ def build_exposure_registry_from_ce(
     current_epoch: Optional[int] = None
     ) -> Dict[str, Dict[str, Any]]:
     """
-    Replay history using only `currently_exposed` saved each epoch.
+    Replay history using only `selected_container` saved each epoch.
 
     Returns:
       {
@@ -59,7 +59,7 @@ def build_exposure_registry_from_ce(
     items: List[Dict[str, Any]] = [getattr(x, "value", x) for x in history]
 
     if include_current is not None and current_epoch is not None:
-        items.append({"epoch":current_epoch, "currently_exposed":include_current})
+        items.append({"epoch":current_epoch, "selected_container":include_current})
 
     items.sort(key=_extract_epoch_from_item)
 
@@ -68,7 +68,7 @@ def build_exposure_registry_from_ce(
 
     for it in items:
         epoch = _extract_epoch_from_item(it)
-        ce = it.get("currently_exposed") or {}
+        ce = it.get("selected_container") or {}
         key = _key_for_entry(ce, key_mode)
 
         # Nothing exposed this epoch (e.g., lockdown) -> skip
@@ -107,37 +107,33 @@ def build_exposure_registry_from_ce(
     # you can collapse here by summing epochs or keeping the longest track.
     return registry
 
-def save_iteration(state: state.HoneypotStateReact, config) -> Dict[str, Any]:
+def save_iteration(state: state.AgentState, config) -> Dict[str, Any]:
     epoch_num = config.get("configurable", {}).get("epoch_num")
 
-    ce = None
-    if state.currently_exposed:
-        ce = {
-            "ip": state.currently_exposed.get("ip"), # type: ignore
-            "service": state.currently_exposed.get("service"), # type: ignore
-            "current_level": state.currently_exposed.get("current_level"), # type: ignore
+    sc = None
+    if state.selected_container:
+        sc = {
+            "ip": state.selected_container.get("ip"), # type: ignore
+            "service": state.selected_container.get("service"), # type: ignore
+            "current_level": state.selected_container.get("current_level"), # type: ignore
             "epoch": epoch_num,
         }
 
     episodic_memory = config.get("configurable", {}).get("store")
 
-    # Build registry purely from currently_exposed history
-    exposure_registry = build_exposure_registry_from_ce(episodic_memory, key_mode="ip", include_current=ce, current_epoch=epoch_num)
+    # Build registry purely from selected_container history
+    exposure_registry = build_exposure_registry_from_ce(episodic_memory, key_mode="ip", include_current=sc, current_epoch=epoch_num)
 
     iteration_data = {
         "epoch": epoch_num,                         # <--- important
-        "currently_exposed": ce,                    # <--- source of truth
+        "selected_container": sc,                    # <--- source of truth
         "exposure_registry": exposure_registry,     # <--- persisted summary (nice to have)
         "rules_added": state.rules_added_current_epoch or [],
         "rules_removed": state.rules_removed_current_epoch or [],
-        "honeypots_exploitation": state.honeypots_exploitation,
+        "containers_exploitation": state.containers_exploitation,
         "lockdown_status": state.lockdown_status,
-        "firewall_reasoning": state.firewall_reasoning,
         "inferred_attack_graph": state.inferred_attack_graph,
-        "reasoning_inference": state.reasoning_inference,
-        "reasoning_exploitation": state.reasoning_exploitation,
-        "exploitation_strategy": state.exploitation_strategy,
-        "security_events_summary": state.security_events_summary,
+        "security_events": state.security_events,
     }
 
     iteration_id = episodic_memory.save_iteration(iteration_data)

@@ -37,20 +37,6 @@ async def add_block_rule(source_ip: str, dest_ip: str, port=None, protocol: str 
         response = await _add_block_rule(source_ip, dest_ip, port, protocol)
     return response 
 
-async def remove_firewall_rule(rule_numbers: List[int]) -> Dict[str, Any]:
-    """
-    Remove firewall rule(s) by number(s)
-
-    Args:
-        rule_numbers: List of rule numbers to remove (single rule = list with one element)
-
-    Returns:
-        Dict with success status and response data
-    """
-    async with firewall_lock:
-        response = await _remove_firewall_rule(rule_numbers)
-    return response
-
 async def get_firewall_rules() -> Dict[str, Any]:
     """
     Get current firewall rules
@@ -67,6 +53,21 @@ async def get_firewall_rules() -> Dict[str, Any]:
         logger.error(f"Failed to get firewall rules: {result['error']}")
         
     return {'firewall_config' : result}
+
+
+async def remove_firewall_rule(rule_numbers: List[int]) -> Dict[str, Any]:
+    """
+    Remove firewall rule(s) by number(s)
+
+    Args:
+        rule_numbers: List of rule numbers to remove (single rule = list with one element)
+
+    Returns:
+        Dict with success status and response data
+    """
+    async with firewall_lock:
+        response = await _remove_firewall_rule(rule_numbers)
+    return response
 
 async def _add_allow_rule(source_ip: str, dest_ip: str, port=None, protocol: str = "tcp") -> Dict[str, Any]:
     """

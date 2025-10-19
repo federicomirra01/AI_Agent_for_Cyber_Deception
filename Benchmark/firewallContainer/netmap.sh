@@ -58,4 +58,5 @@ done
 echo "Interface map after renaming:"
 ip -4 -o addr show
 
+ethtool -K eth0 gro off gso off tso off rxvlan off txvlan off
 exec "$@"

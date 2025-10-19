@@ -1,5 +1,5 @@
 services:
-  vm4-firewall:
+  firewall:
     build:
       context: .
       dockerfile: DockerFile
@@ -47,7 +47,7 @@ services:
   suricata:
     image: jasonish/suricata:latest
     container_name: suricata
-    network_mode: "service:vm4-firewall"  # ← Share network namespace with the gateway
+    network_mode: "service:firewall"  # ← Share network namespace with the gateway
     volumes:
       - ./suricata/suricata.yaml:/etc/suricata/suricata.yaml
       - ./suricata/suricata_rules/threshold.config:/etc/suricata/threshold.config
@@ -55,12 +55,12 @@ services:
       - ./suricata/suricata_logs:/var/log/suricata
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    command: -i eth0
+    command: -i eth0 
     cap_add:
       - NET_ADMIN
       - SYS_NICE
     depends_on:
-      vm4-firewall:
+      firewall:
         condition: service_started
 
 networks:

@@ -17,14 +17,12 @@ class AddAllowRule(BaseModel):
     """Model for adding an allow rule to the firewall."""
     source_ip: str = Field(..., description="Source IP address")
     dest_ip: str = Field(..., description="Destination IP address")
-    #port: Optional[int] = Field(None, description="Port Number (optional)")
     protocol: str = Field("tcp", description="Protocol (default: tcp)")
 
 class AddBlockRule(BaseModel):
     """Model for adding a block rule to the firewall."""
     source_ip: str = Field(..., description="Source IP address")
     dest_ip: str = Field(..., description="Destination IP address")
-    #port: Optional[int] = Field(None, description="Port Number (optional)")
     protocol: str = Field("tcp", description="Protocol (default: tcp)")
 
 class RemoveFirewallRule(BaseModel):
@@ -41,7 +39,7 @@ ACTION_PRIORITY = {
 }
 
 
-async def firewall_executor(state:state.HoneypotStateReact, config):
+async def firewall_executor(state:state.AgentState, config):
     logger.info("Firewall Agent")
     configuration = config.get("configurable", {}).get("model_config", "large:4.1")
     size, version = configuration.split(':')
@@ -56,9 +54,9 @@ async def firewall_executor(state:state.HoneypotStateReact, config):
     messages = [
         {"role":"system", "content": firewall_executor_prompt.SYSTEM_PROMPT},
         {"role" : "user", "content" : firewall_executor_prompt.USER_PROMPT.substitute(
-            selected_honeypot=state.currently_exposed,
+            selected_container=state.selected_container,
             firewall_config=state.firewall_config,
-            available_honeypots=state.honeypot_config
+            vulnerable_containers=state.vulnerable_containers
         )}
     ]
 
@@ -98,13 +96,13 @@ async def firewall_executor(state:state.HoneypotStateReact, config):
         message += f"\nAction: {str(response.action)}"
         message = AIMessage(content=message)
 
-        return {"messages": [message], "firewall_resoning":response.reasoning, "firewall_action": response.action}
+        return {"messages": [message], "firewall_action": response.action}
 
     except Exception as e:
         logger.error(f"Error in firewall executor:\n{e}")
     
 
-async def tools_firewall(state: state.HoneypotStateReact):
+async def tools_firewall(state: state.AgentState):
     """Execute pending tool calls and update state with enhanced threat data handling"""
     agent_output = state.firewall_action
 
