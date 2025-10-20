@@ -1,0 +1,155 @@
+{
+  "epoch_number": 5,
+  "start_time": 1760886320.862676,
+  "end_time": 1760886363.6469913,
+  "phase_timings": {
+    "initialization": 1760886320.8626957,
+    "attack_execution": 1760886320.8753178,
+    "monitoring_accumulation": 1760886342.3773956,
+    "agent_analysis": 1760886352.3784702,
+    "firewall_update_wait": 1760886361.635075,
+    "metrics_collection": 1760886363.6371474,
+    "epoch_complete": 1760886363.6462913
+  },
+  "services_detected": [
+    "HTTP(172.20.0.10:80)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.10",
+    "service": "cve-2021-22205-gitlab-1-proxy",
+    "current_level": 50,
+    "epoch": 5
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 50,
+      "level_new": 50,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.2",
+      "service": "unauthorized-rce-docker-1",
+      "level_prev": 75,
+      "level_new": 75,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.7",
+      "service": "xdebug-rce-xdebug2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.8",
+      "service": "cve-2024-36401-web-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.30",
+      "service": "cve-2013-4547-nginx-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.2",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)",
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.2:2375\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "inferred from later phase: User-Level File Discovery"
+            ]
+          },
+          {
+            "phase": "data-exfil-user",
+            "evidence_quotes": [
+              "User-Level File Discovery",
+              "cat /home/ctf/user.txt\n"
+            ]
+          }
+        ],
+        "current_phase": "data-exfil-user",
+        "vector": "data-exfil-user"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "ET WEB_SERVER Possible bash shell piped to dev tcp Inbound to WebServer M3"
+            ]
+          }
+        ],
+        "current_phase": "initial-access/rce",
+        "vector": "initial-access/rce"
+      }
+    ],
+    "interesting": [
+      {
+        "ip": "172.20.0.2",
+        "service": "unauthorized-rce-docker-1"
+      }
+    ]
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "gitlab:172.20.0.10:80",
+      "service": "gitlab",
+      "host": "172.20.0.10",
+      "port": "80",
+      "url": "http://172.20.0.10:80",
+      "version": "13.12.3",
+      "first_exposed_epoch": 5,
+      "local_epoch": 1,
+      "allowed_phase": "initial-access/rce"
+    }
+  ],
+  "lockdown_activated": false
+}

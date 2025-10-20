@@ -1,0 +1,142 @@
+{
+  "epoch_number": 3,
+  "start_time": 1760886225.4610286,
+  "end_time": 1760886272.7172132,
+  "phase_timings": {
+    "initialization": 1760886225.4610405,
+    "attack_execution": 1760886225.4696038,
+    "monitoring_accumulation": 1760886251.416099,
+    "agent_analysis": 1760886261.41659,
+    "firewall_update_wait": 1760886270.7022545,
+    "metrics_collection": 1760886272.7030752,
+    "epoch_complete": 1760886272.7161088
+  },
+  "services_detected": [
+    "DOCKER(172.20.0.2:2375)"
+  ],
+  "services_successfully_exploited": [
+    "DOCKER"
+  ],
+  "exploits_attempted": [
+    "DOCKER(172.20.0.2:2375)"
+  ],
+  "flags_captured": [
+    {
+      "service": "DOCKER",
+      "flag": "flag{docker}"
+    }
+  ],
+  "attack_success_rate": 100.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.2",
+    "service": "unauthorized-rce-docker-1",
+    "current_level": 75,
+    "epoch": 3
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.2",
+      "service": "unauthorized-rce-docker-1",
+      "level_prev": 25,
+      "level_new": 75,
+      "changed": true,
+      "evidence_quotes": [
+        "User-Level File Discovery"
+      ]
+    },
+    {
+      "ip": "172.20.0.7",
+      "service": "xdebug-rce-xdebug2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.8",
+      "service": "cve-2024-36401-web-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.30",
+      "service": "cve-2013-4547-nginx-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.2",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)",
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.2:2375\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "inferred from later phase: User-Level File Discovery"
+            ]
+          },
+          {
+            "phase": "data-exfil-user",
+            "evidence_quotes": [
+              "User-Level File Discovery",
+              "cat /home/ctf/user.txt\n"
+            ]
+          }
+        ],
+        "current_phase": "data-exfil-user",
+        "vector": "data-exfil-user"
+      }
+    ],
+    "interesting": [
+      {
+        "ip": "172.20.0.2",
+        "service": "unauthorized-rce-docker-1"
+      }
+    ]
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "docker:172.20.0.2:2375",
+      "service": "docker",
+      "host": "172.20.0.2",
+      "port": "2375",
+      "first_exposed_epoch": 2,
+      "local_epoch": 2,
+      "allowed_phase": "data-exfil"
+    }
+  ],
+  "lockdown_activated": false
+}
