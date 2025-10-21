@@ -51,7 +51,7 @@ async def network_gathering(state: state.AgentState, config) -> Dict[str, Any]:
 
     security_events = security_events.get("security_events", {})
     messages = str(f"Security events: {security_events}\n")
-    messages += str(f"Vulnerable Containers: {vulnerable_containers}")
+    messages += str(f"Vulnerable Containers: {vulnerable_containers}\n")
     messages += str(f"Firewall Configuration: {firewall_config}")
     # Update state
     return {

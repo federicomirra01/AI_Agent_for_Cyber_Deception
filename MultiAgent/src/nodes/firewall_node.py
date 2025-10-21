@@ -1,12 +1,13 @@
 from langchain_core.messages import AIMessage
 from configuration import state
 from prompts import firewall_executor_prompt
-from .node_utils import OPEN_AI_KEY
+from .node_utils import OPEN_AI_KEY, POLITO_CLUSTER_KEY, POLITO_URL
 from tools import firewall_tools
 import logging
 from pydantic import BaseModel, Field, ValidationError
 from typing import Union, List
 import instructor
+import json
 from openai import OpenAI
 
 # Configure logging
@@ -29,7 +30,7 @@ class RemoveFirewallRule(BaseModel):
     rule_numbers: List[int] = Field(..., description="List of firewall rule numbers to remove")
 
 class StructuredOutput(BaseModel):
-    reasoning: str = ""
+    reasoning: str = Field("", description="Justification about the action to be taken")
     action: List[Union[AddAllowRule, AddBlockRule, RemoveFirewallRule]] = []
 
 ACTION_PRIORITY = {
@@ -41,18 +42,13 @@ ACTION_PRIORITY = {
 
 async def firewall_executor(state:state.AgentState, config):
     logger.info("Firewall Agent")
-    configuration = config.get("configurable", {}).get("model_config", "large:4.1")
-    size, version = configuration.split(':')
+    model_name = config.get("configurable", {}).get("model_config", "")
     
-    if size == "small":
-        model_name = f"gpt-{version}-mini"
-    else:
-        model_name = f"gpt-{version}"
-
     logger.info(f"Using: {model_name}")
+    postfix = f"\nRespond with a JSON object matching the following schema (no extra text before or after): {StructuredOutput.model_json_schema()}" if "llama" in model_name else ""
 
     messages = [
-        {"role":"system", "content": firewall_executor_prompt.SYSTEM_PROMPT},
+        {"role":"system", "content": firewall_executor_prompt.SYSTEM_PROMPT + postfix},
         {"role" : "user", "content" : firewall_executor_prompt.USER_PROMPT.substitute(
             selected_container=state.selected_container,
             firewall_config=state.firewall_config,
@@ -61,8 +57,8 @@ async def firewall_executor(state:state.AgentState, config):
     ]
 
     try:
-        response = StructuredOutput()
-        if version == '5':
+        response = StructuredOutput(reasoning="")
+        if '5' in model_name:
             valid_json = False
             while(not valid_json):
                 logger.info(f"Using gpt5 minimal effort")
@@ -81,9 +77,9 @@ async def firewall_executor(state:state.AgentState, config):
                     valid_json = True
                 except ValidationError as e:
                     logger.error(f"Schema validation failed: \n{e}")
-                    response = StructuredOutput()
+                    response = StructuredOutput(reasoning="")
             return 
-        elif version == "4.1":
+        elif "4.1" in model_name:
             agent = instructor.from_openai(OpenAI(api_key=OPEN_AI_KEY))
             response: StructuredOutput = agent.chat.completions.create(
                 model=model_name,
@@ -91,7 +87,32 @@ async def firewall_executor(state:state.AgentState, config):
                 temperature=0.3,
                 messages=messages # type: ignore
             )
-        logger.info(f"Response: {response}")
+        elif "llama"in model_name:
+            agent = OpenAI(api_key=POLITO_CLUSTER_KEY, base_url=POLITO_URL)
+            response_open = agent.chat.completions.create(
+                model=model_name,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "StructuredOutput",
+                        "schema": StructuredOutput.model_json_schema()
+                    }
+                },
+                temperature=0.3,
+                messages=messages # type: ignore
+            )
+            raw = response_open.choices[0].message.content 
+
+            logger.info(f"Response: {raw}")
+            
+            try:
+                data = json.loads(raw) # type: ignore
+                response = StructuredOutput(**data)
+            except (json.JSONDecodeError, ValidationError) as e:
+                print("Error parsing or validating output:", e)
+                print("Raw output:", raw)
+                raise
+
         message = f"Reasoning:" + str(response.reasoning)
         message += f"\nAction: {str(response.action)}"
         message = AIMessage(content=message)

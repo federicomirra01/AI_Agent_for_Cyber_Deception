@@ -1,14 +1,14 @@
 from langchain_core.messages import AIMessage
 from configuration import state
 from prompts import exposure_manager_prompt
-from .node_utils import OPEN_AI_KEY
+from .node_utils import OPEN_AI_KEY, POLITO_CLUSTER_KEY, POLITO_URL
 from openai import BadRequestError
 import logging
 from pydantic import BaseModel, ValidationError
 import instructor
 from openai import OpenAI
 from typing import List, Dict, Any
-
+import json
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -37,31 +37,32 @@ async def exposure_manager(state: state.AgentState, config):
     logger.info("Exploitation Agent")
 
     episodic_memory = config.get("configurable", {}).get("store")
-    model_config = config.get("configurable", {}).get("model_config", "large:4.1")
+    model_name = config.get("configurable", {}).get("model_config", "large:4.1")
 
     last_epochs = episodic_memory.get_recent_iterations(limit=20)
     exposure_registry = _extract_exposure_registry(last_epochs)
     logger.info(f"Exposure registry: {exposure_registry}")
     
-    size, version = model_config.split(':')
-  
-    model_name = f"gpt-{version}" if "4.1" in model_config or "5" in model_config else "deepseek"
+    schema = StructuredOutput.model_json_schema()
+
     logger.info(f"Using: {model_name}")
     message = ""
     try:
         response = StructuredOutput(reasoning="", selected_container={})
+        postfix = f"\nRespond with a JSON object matching the following schema (no extra text before or after): {schema}" if "llama" in model_name else ""
+        
         messages = [
-            {"role":"system", "content": exposure_manager_prompt.SYSTEM_PROMPT},
+            {"role":"system", "content": exposure_manager_prompt.SYSTEM_PROMPT + postfix},
             {"role" : "user", "content" : exposure_manager_prompt.USER_PROMPT.substitute(
                 vulnerable_containers=state.vulnerable_containers,
                 containers_exploitation=state.containers_exploitation,
                 exposure_registry=exposure_registry
             )}
         ]
-        if version == '5':
+
+        if '5' in model_name:
             valid_json = False
             while(not valid_json):
-                logger.info(f"Using gpt5 low effort")
                 client = OpenAI()
                 raw = client.responses.create( 
                     model="gpt-5",
@@ -78,7 +79,7 @@ async def exposure_manager(state: state.AgentState, config):
                     logger.error(f"Schema validation failed: \n{e}")
                     response = StructuredOutput(reasoning="", selected_container={})
             return
-        elif version == '4.1':
+        elif '4.1' in model_name:
             agent = instructor.from_openai(OpenAI(api_key=OPEN_AI_KEY))
             response: StructuredOutput = agent.chat.completions.create(
                 model=model_name,
@@ -87,6 +88,32 @@ async def exposure_manager(state: state.AgentState, config):
                 messages=messages # type: ignore
             )
         
+        elif "llama" in model_name:
+            agent = OpenAI(api_key=POLITO_CLUSTER_KEY, base_url=POLITO_URL)
+            response_open = agent.chat.completions.create(
+                model=model_name,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "StructuredOutput",
+                        "schema": schema
+                    }
+                },
+                temperature=0.2,
+                messages=messages # type: ignore
+            )
+            raw = response_open.choices[0].message.content 
+
+            logger.info(f"Response: {raw}")
+            
+            try:
+                data = json.loads(raw) # type: ignore
+                response = StructuredOutput(**data)
+            except (json.JSONDecodeError, ValidationError) as e:
+                print("Error parsing or validating output:", e)
+                print("Raw output:", raw)
+                raise
+
         
         message += f"Reasoning: {str(response.reasoning)}" + "\n"
         message += f"Selected Container: {str(response.selected_container)}" + "\n"
