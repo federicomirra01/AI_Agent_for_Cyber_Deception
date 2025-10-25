@@ -14,6 +14,8 @@ import threading
 from queue import Queue, Empty
 import asyncio
 
+from docker.models.containers import Container
+
 # Configure module logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -83,6 +85,7 @@ class BenchmarkConfig:
     allow_full_compromise: bool = True
     stop_on_lockdown: bool = True
     clear_memory_between_epochs: bool = False
+    mode:str = "deterministic"
     
     # Output configuration
     results_dir: str = "./benchmark_results"
@@ -101,7 +104,7 @@ class AttackerController:
     def __init__(self, config: BenchmarkConfig):
         self.config = config
         self.docker_client = docker.from_env()
-        self.container = None
+        self.container: Container
         self.logger = logging.getLogger(f"{__name__}.AttackerController")
     
     def start(self) -> bool:
@@ -171,7 +174,7 @@ class AttackerController:
                 nonlocal exec_result
                 try:
                     exec_result = self.container.exec_run( # type: ignore
-                        f"python3 /attacker/scripts/manager_exploit.py {epoch_num}",
+                        f"python3 /attacker/scripts/manager_exploit.py {epoch_num} {self.config.mode}",
                         stdout=True,
                         stderr=True,
                         stream=True
