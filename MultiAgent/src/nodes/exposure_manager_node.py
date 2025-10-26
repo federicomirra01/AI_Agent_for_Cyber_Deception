@@ -1,11 +1,10 @@
 from langchain_core.messages import AIMessage
 from configuration import state
 from prompts import exposure_manager_prompt
-from .node_utils import OPEN_AI_KEY, POLITO_CLUSTER_KEY, POLITO_URL
+from .node_utils import POLITO_CLUSTER_KEY, POLITO_URL
 from openai import BadRequestError
 import logging
 from pydantic import BaseModel, ValidationError
-import instructor
 from openai import OpenAI
 from typing import List, Dict, Any
 import json
@@ -34,7 +33,7 @@ async def exposure_manager(state: state.AgentState, config):
     """
     Decides which container(s) to expose next based on current attack graph
     """
-    logger.info("Exploitation Agent")
+    logger.info("Exposure Manager Agent")
 
     episodic_memory = config.get("configurable", {}).get("store")
     model_name = config.get("configurable", {}).get("model_config", "large:4.1")
@@ -45,74 +44,37 @@ async def exposure_manager(state: state.AgentState, config):
     
     schema = StructuredOutput.model_json_schema()
 
-    logger.info(f"Using: {model_name}")
     message = ""
     try:
         response = StructuredOutput(reasoning="", selected_container={})
-        postfix = f"\nRespond with a JSON object matching the following schema (no extra text before or after): {schema}" if "llama" in model_name else ""
-        
+        postfix = f"\nRespond with a JSON object matching the following schema (no extra text before or after): {schema}"
+        system_prompt = exposure_manager_prompt.SYSTEM_PROMPT_GPT
+        user_prompt = exposure_manager_prompt.USER_PROMPT_GPT
         messages = [
-            {"role":"system", "content": exposure_manager_prompt.SYSTEM_PROMPT + postfix},
-            {"role" : "user", "content" : exposure_manager_prompt.USER_PROMPT.substitute(
+            {"role":"system", "content": system_prompt + postfix},
+            {"role" : "user", "content" : user_prompt.substitute(
                 vulnerable_containers=state.vulnerable_containers,
                 containers_exploitation=state.containers_exploitation,
                 exposure_registry=exposure_registry
             )}
         ]
+        agent = OpenAI(api_key=POLITO_CLUSTER_KEY, base_url=POLITO_URL)
+        response_open = agent.chat.completions.create(
+            model=model_name,
+            temperature=0.2,
+            messages=messages # type: ignore
+        )
+        raw = response_open.choices[0].message.content 
 
-        if '5' in model_name:
-            valid_json = False
-            while(not valid_json):
-                client = OpenAI()
-                raw = client.responses.create( 
-                    model="gpt-5",
-                    temperature=0.3,
-                    input=[messages],# type: ignore
-                    reasoning={"effort":"low"},
-                    
-                )
-                content = raw.output_text
-                try:
-                    response = StructuredOutput.model_validate_json(content)
-                    valid_json = True
-                except ValidationError as e:
-                    logger.error(f"Schema validation failed: \n{e}")
-                    response = StructuredOutput(reasoning="", selected_container={})
-            return
-        elif '4.1' in model_name:
-            agent = instructor.from_openai(OpenAI(api_key=OPEN_AI_KEY))
-            response: StructuredOutput = agent.chat.completions.create(
-                model=model_name,
-                response_model=StructuredOutput,
-                temperature=0.3,
-                messages=messages # type: ignore
-            )
-        
-        elif "llama" in model_name:
-            agent = OpenAI(api_key=POLITO_CLUSTER_KEY, base_url=POLITO_URL)
-            response_open = agent.chat.completions.create(
-                model=model_name,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": "StructuredOutput",
-                        "schema": schema
-                    }
-                },
-                temperature=0.2,
-                messages=messages # type: ignore
-            )
-            raw = response_open.choices[0].message.content 
-
-            logger.info(f"Response: {raw}")
+        #logger.info(f"Response: {raw}")
             
-            try:
-                data = json.loads(raw) # type: ignore
-                response = StructuredOutput(**data)
-            except (json.JSONDecodeError, ValidationError) as e:
-                print("Error parsing or validating output:", e)
-                print("Raw output:", raw)
-                raise
+        try:
+            data = json.loads(raw) # type: ignore
+            response = StructuredOutput(**data)
+        except (json.JSONDecodeError, ValidationError) as e:
+            print("Error parsing or validating output:", e)
+            print("Raw output:", raw)
+            raise
 
         
         message += f"Reasoning: {str(response.reasoning)}" + "\n"

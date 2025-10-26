@@ -1,0 +1,127 @@
+{
+  "epoch_number": 6,
+  "start_time": 1761486343.7164304,
+  "end_time": 1761486428.7775564,
+  "phase_timings": {
+    "initialization": 1761486343.7164423,
+    "attack_execution": 1761486343.7268522,
+    "monitoring_accumulation": 1761486361.9872208,
+    "agent_analysis": 1761486366.9881587,
+    "firewall_update_wait": 1761486426.7659175,
+    "metrics_collection": 1761486428.7667484,
+    "epoch_complete": 1761486428.7769387
+  },
+  "services_detected": [
+    "HTTP-PROXY(172.20.0.3:8080)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
+    "current_level": 25,
+    "epoch": 6
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 25,
+      "changed": true,
+      "evidence_quotes": [
+        "PORT SCAN"
+      ]
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.3",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      }
+    ],
+    "interesting": []
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "struts:172.20.0.3:8080",
+      "service": "struts",
+      "host": "172.20.0.3",
+      "port": "8080",
+      "path": "struts2-showcase",
+      "first_exposed_epoch": 6,
+      "local_epoch": 1,
+      "allowed_phase": "initial-access/rce",
+      "rotation_attempt_prob": 1,
+      "attempted": true
+    }
+  ],
+  "lockdown_activated": false
+}
