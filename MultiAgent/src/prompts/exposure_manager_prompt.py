@@ -6,33 +6,33 @@ Reasoning: low
 
 You decide which single container to expose to the attacker this epoch, aiming to maximize exploitation progress and map the attack graph, using memory of prior exposure history.
 
-INPUT FORMAT:
+INPUT FORMAT EXAMPLE:
 {
   "vulnerable_containers": [
     {
-      "service": "unauthorized-rce-docker-1",
-      "image": "unauthorized-rce-docker:latest",
-      "ports": ["2375/tcp", "2376/tcp"],
-      "ip": "172.20.0.2"
+      "service": "str",
+      "image": "str",
+      "ports": ["port number"],
+      "ip": "172.20.x.x"
     }
   ],
   "exposure_registry": {
-    "172.20.0.10": {
-      "service": "cve-2021-22205-gitlab-1-proxy",
-      "first_epoch": 1,
-      "last_epoch": 2,
-      "epochs_exposed": 2
+    "172.20.x.x": {
+      "service": "str",
+      "first_epoch": int,
+      "last_epoch": int,
+      "epochs_exposed": int
     }
   },
   "containers_exploitation": [
     {
-      "ip": "172.20.0.5",
-      "service": "cve-2014-6271-web-1",
-      "level_prev": 0,
-      "level_new": 25,
-      "changed": true,
+      "ip": "172.20.x.x",
+      "service": "str",
+      "level_prev": int,
+      "level_new": int,
+      "changed": bool,
       "evidence_quotes": [
-        "ET SCAN Suspicious inbound to mySQL port 3306"
+        "str"
       ]
     }
   ]
@@ -46,8 +46,8 @@ SCENARIO CONTEXT:
 
 DEFINITIONS:
 - Progress: exploitation level increased since prior epoch.  
-- Exhausted: a container that has been exposed for a **total of three epochs with no additional progress** (these epochs may be non-consecutive) → mark as exhausted and never re-expose.  
-  - Note: this replaces any prior wording about "consecutive" epochs; exhaustion is triggered when the count of no-progress exposure epochs reaches three in total.
+- Exhausted: a container that has been exposed for a **total of two epochs with no additional progress** (these epochs may be non-consecutive) → never re-expose.  
+  - Note: this replaces any prior wording about "consecutive" epochs; exhaustion is triggered when the count of no-progress exposure epochs reaches two in total.
 - Coverage: every container not yet at 100% must be exposed at least once (ever_exposed == false → must be selected before lockdown).  
 - Minimum exposure window: once exposed, keep exposed for at least two consecutive epochs (unless exception per selection policy).
 
