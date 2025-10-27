@@ -1,15 +1,15 @@
 {
   "epoch_number": 2,
-  "start_time": 1761500208.8750086,
-  "end_time": 1761500262.630593,
+  "start_time": 1761580779.2836738,
+  "end_time": 1761580831.9053907,
   "phase_timings": {
-    "initialization": 1761500208.8750389,
-    "attack_execution": 1761500208.8878407,
-    "monitoring_accumulation": 1761500224.474831,
-    "agent_analysis": 1761500229.475646,
-    "firewall_update_wait": 1761500260.6166055,
-    "metrics_collection": 1761500262.6173928,
-    "epoch_complete": 1761500262.6299686
+    "initialization": 1761580779.2836945,
+    "attack_execution": 1761580779.2959778,
+    "monitoring_accumulation": 1761580794.8451853,
+    "agent_analysis": 1761580799.8459494,
+    "firewall_update_wait": 1761580829.8828318,
+    "metrics_collection": 1761580831.883741,
+    "epoch_complete": 1761580831.9047294
   },
   "services_detected": [
     "HTTP(172.20.0.5:80)"

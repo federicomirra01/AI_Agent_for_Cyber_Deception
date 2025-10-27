@@ -1,15 +1,15 @@
 {
   "epoch_number": 5,
-  "start_time": 1761486278.7406037,
-  "end_time": 1761486342.7129004,
+  "start_time": 1761579254.8043156,
+  "end_time": 1761579313.2550533,
   "phase_timings": {
-    "initialization": 1761486278.740618,
-    "attack_execution": 1761486278.7531714,
-    "monitoring_accumulation": 1761486294.6410475,
-    "agent_analysis": 1761486299.641981,
-    "firewall_update_wait": 1761486340.6996834,
-    "metrics_collection": 1761486342.7007873,
-    "epoch_complete": 1761486342.7121944
+    "initialization": 1761579254.8043365,
+    "attack_execution": 1761579254.8182056,
+    "monitoring_accumulation": 1761579270.7031496,
+    "agent_analysis": 1761579275.7042358,
+    "firewall_update_wait": 1761579311.23775,
+    "metrics_collection": 1761579313.238856,
+    "epoch_complete": 1761579313.2541542
   },
   "services_detected": [
     "PATROL-SNMP(172.20.0.4:8161)",
@@ -21,10 +21,10 @@
   "attack_success_rate": 0.0,
   "firewall_rules_added": [
     {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
+      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.10 (tcp)"
     },
     {
-      "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
+      "rules_added_current_epoch": "ALLOW 172.20.0.10 -> 192.168.100.0/24 (tcp)"
     }
   ],
   "firewall_rules_removed": [
@@ -36,8 +36,8 @@
     }
   ],
   "selected_container": {
-    "ip": "172.20.0.3",
-    "service": "s2-057-struts2-1",
+    "ip": "172.20.0.10",
+    "service": "cve-2021-22205-gitlab-1-proxy",
     "current_level": 0,
     "epoch": 5
   },
@@ -98,7 +98,9 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           }
         ],

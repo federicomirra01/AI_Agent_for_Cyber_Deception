@@ -1,15 +1,15 @@
 {
   "epoch_number": 4,
-  "start_time": 1761486213.562268,
-  "end_time": 1761486277.7360647,
+  "start_time": 1761579189.8403158,
+  "end_time": 1761579253.7998009,
   "phase_timings": {
-    "initialization": 1761486213.5622795,
-    "attack_execution": 1761486213.5741239,
-    "monitoring_accumulation": 1761486229.5095377,
-    "agent_analysis": 1761486234.5106666,
-    "firewall_update_wait": 1761486275.7220805,
-    "metrics_collection": 1761486277.722892,
-    "epoch_complete": 1761486277.7350743
+    "initialization": 1761579189.8403425,
+    "attack_execution": 1761579189.8565931,
+    "monitoring_accumulation": 1761579205.8846188,
+    "agent_analysis": 1761579210.8861995,
+    "firewall_update_wait": 1761579251.7842627,
+    "metrics_collection": 1761579253.785258,
+    "epoch_complete": 1761579253.798979
   },
   "services_detected": [
     "UNKNOWN(172.20.0.4:61616)",
@@ -43,7 +43,7 @@
       "level_new": 25,
       "changed": true,
       "evidence_quotes": [
-        "PORT SCAN"
+        "ET SCAN Suspicious inbound to MSSQL port 1433"
       ]
     },
     {
@@ -86,7 +86,9 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           }
         ],

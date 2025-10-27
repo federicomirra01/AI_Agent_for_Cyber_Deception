@@ -1,29 +1,40 @@
 {
   "epoch_number": 8,
-  "start_time": 1761486508.0812,
-  "end_time": 1761486597.2276943,
+  "start_time": 1761579469.033026,
+  "end_time": 1761579554.1450746,
   "phase_timings": {
-    "initialization": 1761486508.0812113,
-    "attack_execution": 1761486508.0918062,
-    "monitoring_accumulation": 1761486530.2657015,
-    "agent_analysis": 1761486535.2671032,
-    "firewall_update_wait": 1761486595.214316,
-    "metrics_collection": 1761486597.2156324,
-    "epoch_complete": 1761486597.2269344
+    "initialization": 1761579469.033047,
+    "attack_execution": 1761579469.0461767,
+    "monitoring_accumulation": 1761579506.9584444,
+    "agent_analysis": 1761579511.9594772,
+    "firewall_update_wait": 1761579552.1274133,
+    "metrics_collection": 1761579554.1284509,
+    "epoch_complete": 1761579554.143903
   },
   "services_detected": [
     "HTTP(172.20.0.10:80)"
   ],
-  "services_successfully_exploited": [],
+  "services_successfully_exploited": [
+    "GITLAB"
+  ],
   "exploits_attempted": [],
-  "flags_captured": [],
+  "flags_captured": [
+    {
+      "service": "GITLAB",
+      "flag": "flag{user_access_gitlab}"
+    },
+    {
+      "service": "GITLAB",
+      "flag": "flag{privileged_access_gitlab}"
+    }
+  ],
   "attack_success_rate": 0.0,
   "firewall_rules_added": [],
   "firewall_rules_removed": [],
   "selected_container": {
-    "ip": "172.20.0.10",
-    "service": "cve-2021-22205-gitlab-1-proxy",
-    "current_level": 25,
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
+    "current_level": 0,
     "epoch": 8
   },
   "containers_exploitation": [
@@ -46,16 +57,18 @@
     {
       "ip": "172.20.0.10",
       "service": "cve-2021-22205-gitlab-1-proxy",
-      "level_prev": 25,
-      "level_new": 25,
-      "changed": false,
-      "evidence_quotes": []
+      "level_prev": 75,
+      "level_new": 100,
+      "changed": true,
+      "evidence_quotes": [
+        "cat /root/root.txt"
+      ]
     },
     {
       "ip": "172.20.0.3",
       "service": "s2-057-struts2-1",
-      "level_prev": 100,
-      "level_new": 100,
+      "level_prev": 0,
+      "level_new": 0,
       "changed": false,
       "evidence_quotes": []
     }
@@ -83,7 +96,9 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           }
         ],
@@ -92,7 +107,7 @@
       },
       {
         "from": "192.168.100.2",
-        "to": "172.20.0.3",
+        "to": "172.20.0.10",
         "phases": [
           {
             "phase": "scan",
@@ -103,7 +118,13 @@
           {
             "phase": "initial-access/rce",
             "evidence_quotes": [
-              "inferred from later phase: cat /root/root.txt"
+              "bash shell"
+            ]
+          },
+          {
+            "phase": "data-exfil-user",
+            "evidence_quotes": [
+              "cat /home/ctf/user.txt"
             ]
           },
           {
@@ -121,27 +142,12 @@
         ],
         "current_phase": "data-exfil-root",
         "vector": "data-exfil-root"
-      },
-      {
-        "from": "192.168.100.2",
-        "to": "172.20.0.10",
-        "phases": [
-          {
-            "phase": "scan",
-            "evidence_quotes": [
-              "PORT SCAN",
-              "NMAP"
-            ]
-          }
-        ],
-        "current_phase": "scan",
-        "vector": "scan"
       }
     ],
     "interesting": [
       {
-        "ip": "172.20.0.3",
-        "service": "s2-057-struts2-1"
+        "ip": "172.20.0.10",
+        "service": "cve-2021-22205-gitlab-1-proxy"
       }
     ]
   },
@@ -153,9 +159,9 @@
       "port": "80",
       "url": "http://172.20.0.10:80",
       "version": "13.12.3",
-      "first_exposed_epoch": 8,
-      "local_epoch": 1,
-      "allowed_phase": "initial-access/rce",
+      "first_exposed_epoch": 6,
+      "local_epoch": 3,
+      "allowed_phase": "privilege_escalation",
       "rotation_attempt_prob": 1,
       "attempted": true
     }

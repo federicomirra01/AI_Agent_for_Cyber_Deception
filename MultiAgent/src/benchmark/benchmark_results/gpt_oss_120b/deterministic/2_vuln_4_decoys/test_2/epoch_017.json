@@ -1,15 +1,15 @@
 {
-  "epoch_number": 13,
-  "start_time": 1761500986.6761956,
-  "end_time": 1761501052.7603347,
+  "epoch_number": 17,
+  "start_time": 1761584807.2393327,
+  "end_time": 1761584887.471231,
   "phase_timings": {
-    "initialization": 1761500986.6762135,
-    "attack_execution": 1761500986.689255,
-    "monitoring_accumulation": 1761501002.3572204,
-    "agent_analysis": 1761501007.3585577,
-    "firewall_update_wait": 1761501050.7453299,
-    "metrics_collection": 1761501052.7461514,
-    "epoch_complete": 1761501052.75913
+    "initialization": 1761584807.2393448,
+    "attack_execution": 1761584807.250756,
+    "monitoring_accumulation": 1761584822.6351984,
+    "agent_analysis": 1761584827.6362948,
+    "firewall_update_wait": 1761584885.456601,
+    "metrics_collection": 1761584887.457686,
+    "epoch_complete": 1761584887.470465
   },
   "services_detected": [
     "HTTP(172.20.0.5:80)"
@@ -21,12 +21,28 @@
   "firewall_rules_added": [],
   "firewall_rules_removed": [],
   "selected_container": {
-    "ip": "172.20.0.5",
-    "service": "cve-2014-6271-web-1",
+    "ip": "172.20.0.4",
+    "service": "cve-2015-5254-activemq-1",
     "current_level": 25,
-    "epoch": 13
+    "epoch": 17
   },
   "containers_exploitation": [
+    {
+      "ip": "172.20.0.8",
+      "service": "cve-2024-36401-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.30",
+      "service": "cve-2013-4547-nginx-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
     {
       "ip": "172.20.0.5",
       "service": "cve-2014-6271-web-1",
@@ -64,12 +80,40 @@
     "edges": [
       {
         "from": "192.168.100.2",
+        "to": "172.20.0.8",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.30",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
         "to": "172.20.0.5",
         "phases": [
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           }
         ],
@@ -83,7 +127,7 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           }
         ],
@@ -97,7 +141,7 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           },
           {
@@ -135,7 +179,7 @@
           {
             "phase": "scan",
             "evidence_quotes": [
-              "PORT SCAN"
+              "POSSBL PORT SCAN (NMAP -sS)"
             ]
           },
           {

@@ -1,43 +1,36 @@
 {
   "epoch_number": 11,
-  "start_time": 1761500838.7949173,
-  "end_time": 1761500908.4302816,
+  "start_time": 1761581399.184112,
+  "end_time": 1761581474.258473,
   "phase_timings": {
-    "initialization": 1761500838.7949324,
-    "attack_execution": 1761500838.8063564,
-    "monitoring_accumulation": 1761500854.3311405,
-    "agent_analysis": 1761500859.3324225,
-    "firewall_update_wait": 1761500906.413106,
-    "metrics_collection": 1761500908.4160438,
-    "epoch_complete": 1761500908.4293027
+    "initialization": 1761581399.1841242,
+    "attack_execution": 1761581399.1929739,
+    "monitoring_accumulation": 1761581422.8639913,
+    "agent_analysis": 1761581427.8646584,
+    "firewall_update_wait": 1761581472.244937,
+    "metrics_collection": 1761581474.24566,
+    "epoch_complete": 1761581474.2578232
   },
   "services_detected": [
-    "HTTP(172.20.0.5:80)"
+    "HTTP-PROXY(172.20.0.3:8080)"
   ],
-  "services_successfully_exploited": [],
+  "services_successfully_exploited": [
+    "STRUTS"
+  ],
   "exploits_attempted": [],
-  "flags_captured": [],
+  "flags_captured": [
+    {
+      "service": "STRUTS",
+      "flag": "flag{privileged_access_struts}"
+    }
+  ],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [
-    {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.4 (tcp)"
-    },
-    {
-      "rules_added_current_epoch": "ALLOW 172.20.0.4 -> 192.168.100.0/24 (tcp)"
-    }
-  ],
-  "firewall_rules_removed": [
-    {
-      "rules_removed_current_epoch": [
-        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.5           192.168.100.0/24",
-        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.5"
-      ]
-    }
-  ],
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
   "selected_container": {
-    "ip": "172.20.0.4",
-    "service": "cve-2015-5254-activemq-1",
-    "current_level": 25,
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
+    "current_level": 100,
     "epoch": 11
   },
   "containers_exploitation": [
@@ -68,10 +61,12 @@
     {
       "ip": "172.20.0.3",
       "service": "s2-057-struts2-1",
-      "level_prev": 100,
+      "level_prev": 25,
       "level_new": 100,
-      "changed": false,
-      "evidence_quotes": []
+      "changed": true,
+      "evidence_quotes": [
+        "cat /root/root.txt"
+      ]
     }
   ],
   "inferred_attack_graph": {
@@ -186,6 +181,19 @@
       }
     ]
   },
-  "service_epoch_context": [],
-  "lockdown_activated": false
+  "service_epoch_context": [
+    {
+      "service_id": "struts:172.20.0.3:8080",
+      "service": "struts",
+      "host": "172.20.0.3",
+      "port": "8080",
+      "path": "struts2-showcase",
+      "first_exposed_epoch": 10,
+      "local_epoch": 2,
+      "allowed_phase": "data-exfil",
+      "rotation_attempt_prob": 1,
+      "attempted": true
+    }
+  ],
+  "lockdown_activated": true
 }

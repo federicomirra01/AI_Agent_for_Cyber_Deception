@@ -1,49 +1,28 @@
 {
   "epoch_number": 10,
-  "start_time": 1761500762.9308867,
-  "end_time": 1761500837.7908797,
+  "start_time": 1761581326.7758293,
+  "end_time": 1761581398.1781387,
   "phase_timings": {
-    "initialization": 1761500762.930908,
-    "attack_execution": 1761500762.942291,
-    "monitoring_accumulation": 1761500786.5428193,
-    "agent_analysis": 1761500791.5436852,
-    "firewall_update_wait": 1761500835.7735367,
-    "metrics_collection": 1761500837.7762132,
-    "epoch_complete": 1761500837.789809
+    "initialization": 1761581326.7758489,
+    "attack_execution": 1761581326.7842884,
+    "monitoring_accumulation": 1761581344.3115206,
+    "agent_analysis": 1761581349.3133066,
+    "firewall_update_wait": 1761581396.1606662,
+    "metrics_collection": 1761581398.1622796,
+    "epoch_complete": 1761581398.1773894
   },
   "services_detected": [
     "HTTP-PROXY(172.20.0.3:8080)"
   ],
-  "services_successfully_exploited": [
-    "STRUTS"
-  ],
+  "services_successfully_exploited": [],
   "exploits_attempted": [],
-  "flags_captured": [
-    {
-      "service": "STRUTS",
-      "flag": "flag{privileged_access_struts}"
-    }
-  ],
+  "flags_captured": [],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [
-    {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.5 (tcp)"
-    },
-    {
-      "rules_added_current_epoch": "ALLOW 172.20.0.5 -> 192.168.100.0/24 (tcp)"
-    }
-  ],
-  "firewall_rules_removed": [
-    {
-      "rules_removed_current_epoch": [
-        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.3           192.168.100.0/24",
-        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.3"
-      ]
-    }
-  ],
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
   "selected_container": {
-    "ip": "172.20.0.5",
-    "service": "cve-2014-6271-web-1",
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
     "current_level": 25,
     "epoch": 10
   },
@@ -75,11 +54,11 @@
     {
       "ip": "172.20.0.3",
       "service": "s2-057-struts2-1",
-      "level_prev": 25,
-      "level_new": 100,
+      "level_prev": 0,
+      "level_new": 25,
       "changed": true,
       "evidence_quotes": [
-        "cat /root/root.txt"
+        "PORT SCAN"
       ]
     }
   ],
@@ -160,38 +139,16 @@
             "evidence_quotes": [
               "PORT SCAN"
             ]
-          },
-          {
-            "phase": "initial-access/rce",
-            "evidence_quotes": [
-              "inferred from later phase: cat /root/root.txt"
-            ]
-          },
-          {
-            "phase": "privilege-escalation",
-            "evidence_quotes": [
-              "inferred from later phase: cat /root/root.txt"
-            ]
-          },
-          {
-            "phase": "data-exfil-root",
-            "evidence_quotes": [
-              "cat /root/root.txt"
-            ]
           }
         ],
-        "current_phase": "data-exfil-root",
-        "vector": "data-exfil-root"
+        "current_phase": "scan",
+        "vector": "scan"
       }
     ],
     "interesting": [
       {
         "ip": "172.20.0.10",
         "service": "cve-2021-22205-gitlab-1-proxy"
-      },
-      {
-        "ip": "172.20.0.3",
-        "service": "s2-057-struts2-1"
       }
     ]
   },
@@ -202,9 +159,9 @@
       "host": "172.20.0.3",
       "port": "8080",
       "path": "struts2-showcase",
-      "first_exposed_epoch": 9,
-      "local_epoch": 2,
-      "allowed_phase": "data-exfil",
+      "first_exposed_epoch": 10,
+      "local_epoch": 1,
+      "allowed_phase": "initial-access/rce",
       "rotation_attempt_prob": 1,
       "attempted": true
     }

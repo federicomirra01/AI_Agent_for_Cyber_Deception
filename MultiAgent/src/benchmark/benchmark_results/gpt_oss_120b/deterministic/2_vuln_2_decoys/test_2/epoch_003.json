@@ -1,15 +1,15 @@
 {
   "epoch_number": 3,
-  "start_time": 1761500263.6348646,
-  "end_time": 1761500326.3612247,
+  "start_time": 1761580832.9094644,
+  "end_time": 1761580888.7372122,
   "phase_timings": {
-    "initialization": 1761500263.634873,
-    "attack_execution": 1761500263.643748,
-    "monitoring_accumulation": 1761500279.1628108,
-    "agent_analysis": 1761500284.1639214,
-    "firewall_update_wait": 1761500324.3507164,
-    "metrics_collection": 1761500326.3520956,
-    "epoch_complete": 1761500326.3606877
+    "initialization": 1761580832.909479,
+    "attack_execution": 1761580832.9217896,
+    "monitoring_accumulation": 1761580848.5653896,
+    "agent_analysis": 1761580853.566033,
+    "firewall_update_wait": 1761580886.7187722,
+    "metrics_collection": 1761580888.720624,
+    "epoch_complete": 1761580888.735969
   },
   "services_detected": [
     "HTTP(172.20.0.5:80)"
@@ -18,22 +18,8 @@
   "exploits_attempted": [],
   "flags_captured": [],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [
-    {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.4 (tcp)"
-    },
-    {
-      "rules_added_current_epoch": "ALLOW 172.20.0.4 -> 192.168.100.0/24 (tcp)"
-    }
-  ],
-  "firewall_rules_removed": [
-    {
-      "rules_removed_current_epoch": [
-        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.5           192.168.100.0/24",
-        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.5"
-      ]
-    }
-  ],
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
   "selected_container": {
     "ip": "172.20.0.4",
     "service": "cve-2015-5254-activemq-1",

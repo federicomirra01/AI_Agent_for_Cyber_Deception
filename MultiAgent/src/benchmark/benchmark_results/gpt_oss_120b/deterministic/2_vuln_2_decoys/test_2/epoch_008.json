@@ -1,15 +1,15 @@
 {
   "epoch_number": 8,
-  "start_time": 1761500592.5613372,
-  "end_time": 1761500683.7867434,
+  "start_time": 1761581155.2644374,
+  "end_time": 1761581232.6203744,
   "phase_timings": {
-    "initialization": 1761500592.5613475,
-    "attack_execution": 1761500592.574898,
-    "monitoring_accumulation": 1761500629.862579,
-    "agent_analysis": 1761500634.8632445,
-    "firewall_update_wait": 1761500681.7657578,
-    "metrics_collection": 1761500683.7666795,
-    "epoch_complete": 1761500683.7860496
+    "initialization": 1761581155.2644484,
+    "attack_execution": 1761581155.2773402,
+    "monitoring_accumulation": 1761581183.3879442,
+    "agent_analysis": 1761581188.3893013,
+    "firewall_update_wait": 1761581230.6055365,
+    "metrics_collection": 1761581232.6076212,
+    "epoch_complete": 1761581232.619409
   },
   "services_detected": [
     "HTTP(172.20.0.10:80)"
@@ -22,33 +22,15 @@
     {
       "service": "GITLAB",
       "flag": "flag{user_access_gitlab}"
-    },
-    {
-      "service": "GITLAB",
-      "flag": "flag{privileged_access_gitlab}"
     }
   ],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [
-    {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
-    },
-    {
-      "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
-    }
-  ],
-  "firewall_rules_removed": [
-    {
-      "rules_removed_current_epoch": [
-        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.10          192.168.100.0/24",
-        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.10"
-      ]
-    }
-  ],
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
   "selected_container": {
-    "ip": "172.20.0.3",
-    "service": "s2-057-struts2-1",
-    "current_level": 0,
+    "ip": "172.20.0.10",
+    "service": "cve-2021-22205-gitlab-1-proxy",
+    "current_level": 75,
     "epoch": 8
   },
   "containers_exploitation": [
@@ -71,11 +53,11 @@
     {
       "ip": "172.20.0.10",
       "service": "cve-2021-22205-gitlab-1-proxy",
-      "level_prev": 75,
-      "level_new": 100,
+      "level_prev": 25,
+      "level_new": 75,
       "changed": true,
       "evidence_quotes": [
-        "cat /root/root.txt"
+        "cat /home/ctf/user.txt"
       ]
     },
     {
@@ -138,22 +120,10 @@
             "evidence_quotes": [
               "cat /home/ctf/user.txt"
             ]
-          },
-          {
-            "phase": "privilege-escalation",
-            "evidence_quotes": [
-              "inferred from later phase: cat /root/root.txt"
-            ]
-          },
-          {
-            "phase": "data-exfil-root",
-            "evidence_quotes": [
-              "cat /root/root.txt"
-            ]
           }
         ],
-        "current_phase": "data-exfil-root",
-        "vector": "data-exfil-root"
+        "current_phase": "data-exfil-user",
+        "vector": "data-exfil-user"
       }
     ],
     "interesting": [
@@ -171,9 +141,9 @@
       "port": "80",
       "url": "http://172.20.0.10:80",
       "version": "13.12.3",
-      "first_exposed_epoch": 6,
-      "local_epoch": 3,
-      "allowed_phase": "privilege_escalation",
+      "first_exposed_epoch": 7,
+      "local_epoch": 2,
+      "allowed_phase": "data-exfil",
       "rotation_attempt_prob": 1,
       "attempted": true
     }

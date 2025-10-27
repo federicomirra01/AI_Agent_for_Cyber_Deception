@@ -1,29 +1,54 @@
 {
   "epoch_number": 9,
-  "start_time": 1761500684.7901921,
-  "end_time": 1761500761.9257,
+  "start_time": 1761581233.6246245,
+  "end_time": 1761581325.7735093,
   "phase_timings": {
-    "initialization": 1761500684.7902298,
-    "attack_execution": 1761500684.8004816,
-    "monitoring_accumulation": 1761500702.9545536,
-    "agent_analysis": 1761500707.955447,
-    "firewall_update_wait": 1761500759.9091294,
-    "metrics_collection": 1761500761.9098592,
-    "epoch_complete": 1761500761.924705
+    "initialization": 1761581233.6246371,
+    "attack_execution": 1761581233.6373978,
+    "monitoring_accumulation": 1761581270.86615,
+    "agent_analysis": 1761581275.8674471,
+    "firewall_update_wait": 1761581323.7603288,
+    "metrics_collection": 1761581325.7612019,
+    "epoch_complete": 1761581325.7728066
   },
   "services_detected": [
-    "HTTP-PROXY(172.20.0.3:8080)"
+    "HTTP(172.20.0.10:80)"
   ],
-  "services_successfully_exploited": [],
+  "services_successfully_exploited": [
+    "GITLAB"
+  ],
   "exploits_attempted": [],
-  "flags_captured": [],
+  "flags_captured": [
+    {
+      "service": "GITLAB",
+      "flag": "flag{user_access_gitlab}"
+    },
+    {
+      "service": "GITLAB",
+      "flag": "flag{privileged_access_gitlab}"
+    }
+  ],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [],
-  "firewall_rules_removed": [],
+  "firewall_rules_added": [
+    {
+      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
+    },
+    {
+      "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
+    }
+  ],
+  "firewall_rules_removed": [
+    {
+      "rules_removed_current_epoch": [
+        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.10          192.168.100.0/24",
+        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.10"
+      ]
+    }
+  ],
   "selected_container": {
     "ip": "172.20.0.3",
     "service": "s2-057-struts2-1",
-    "current_level": 25,
+    "current_level": 0,
     "epoch": 9
   },
   "containers_exploitation": [
@@ -46,20 +71,20 @@
     {
       "ip": "172.20.0.10",
       "service": "cve-2021-22205-gitlab-1-proxy",
-      "level_prev": 100,
+      "level_prev": 75,
       "level_new": 100,
-      "changed": false,
-      "evidence_quotes": []
+      "changed": true,
+      "evidence_quotes": [
+        "cat /root/root.txt"
+      ]
     },
     {
       "ip": "172.20.0.3",
       "service": "s2-057-struts2-1",
       "level_prev": 0,
-      "level_new": 25,
-      "changed": true,
-      "evidence_quotes": [
-        "PORT SCAN"
-      ]
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
     }
   ],
   "inferred_attack_graph": {
@@ -129,20 +154,6 @@
         ],
         "current_phase": "data-exfil-root",
         "vector": "data-exfil-root"
-      },
-      {
-        "from": "192.168.100.2",
-        "to": "172.20.0.3",
-        "phases": [
-          {
-            "phase": "scan",
-            "evidence_quotes": [
-              "PORT SCAN"
-            ]
-          }
-        ],
-        "current_phase": "scan",
-        "vector": "scan"
       }
     ],
     "interesting": [
@@ -154,14 +165,15 @@
   },
   "service_epoch_context": [
     {
-      "service_id": "struts:172.20.0.3:8080",
-      "service": "struts",
-      "host": "172.20.0.3",
-      "port": "8080",
-      "path": "struts2-showcase",
-      "first_exposed_epoch": 9,
-      "local_epoch": 1,
-      "allowed_phase": "initial-access/rce",
+      "service_id": "gitlab:172.20.0.10:80",
+      "service": "gitlab",
+      "host": "172.20.0.10",
+      "port": "80",
+      "url": "http://172.20.0.10:80",
+      "version": "13.12.3",
+      "first_exposed_epoch": 7,
+      "local_epoch": 3,
+      "allowed_phase": "privilege_escalation",
       "rotation_attempt_prob": 1,
       "attempted": true
     }

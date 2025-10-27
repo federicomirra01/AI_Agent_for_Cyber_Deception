@@ -1,15 +1,15 @@
 {
   "epoch_number": 5,
-  "start_time": 1761500391.7285106,
-  "end_time": 1761500444.4536507,
+  "start_time": 1761580943.9935942,
+  "end_time": 1761581010.0751655,
   "phase_timings": {
-    "initialization": 1761500391.728523,
-    "attack_execution": 1761500391.7387578,
-    "monitoring_accumulation": 1761500407.596773,
-    "agent_analysis": 1761500412.599347,
-    "firewall_update_wait": 1761500442.4352076,
-    "metrics_collection": 1761500444.4373083,
-    "epoch_complete": 1761500444.452848
+    "initialization": 1761580943.9936137,
+    "attack_execution": 1761580944.005926,
+    "monitoring_accumulation": 1761580959.804142,
+    "agent_analysis": 1761580964.8046381,
+    "firewall_update_wait": 1761581008.0626535,
+    "metrics_collection": 1761581010.0632327,
+    "epoch_complete": 1761581010.0740945
   },
   "services_detected": [
     "UNKNOWN(172.20.0.4:61616)",
@@ -19,26 +19,12 @@
   "exploits_attempted": [],
   "flags_captured": [],
   "attack_success_rate": 0.0,
-  "firewall_rules_added": [
-    {
-      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.10 (tcp)"
-    },
-    {
-      "rules_added_current_epoch": "ALLOW 172.20.0.10 -> 192.168.100.0/24 (tcp)"
-    }
-  ],
-  "firewall_rules_removed": [
-    {
-      "rules_removed_current_epoch": [
-        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.4           192.168.100.0/24",
-        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.4"
-      ]
-    }
-  ],
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
   "selected_container": {
-    "ip": "172.20.0.10",
-    "service": "cve-2021-22205-gitlab-1-proxy",
-    "current_level": 0,
+    "ip": "172.20.0.4",
+    "service": "cve-2015-5254-activemq-1",
+    "current_level": 25,
     "epoch": 5
   },
   "containers_exploitation": [
@@ -53,10 +39,12 @@
     {
       "ip": "172.20.0.4",
       "service": "cve-2015-5254-activemq-1",
-      "level_prev": 25,
+      "level_prev": 0,
       "level_new": 25,
-      "changed": false,
-      "evidence_quotes": []
+      "changed": true,
+      "evidence_quotes": [
+        "PORT SCAN"
+      ]
     },
     {
       "ip": "172.20.0.10",
