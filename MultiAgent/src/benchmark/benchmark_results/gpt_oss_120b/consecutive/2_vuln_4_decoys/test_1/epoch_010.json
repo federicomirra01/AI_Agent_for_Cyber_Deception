@@ -1,0 +1,175 @@
+{
+  "epoch_number": 10,
+  "start_time": 1761676415.2622914,
+  "end_time": 1761676600.3285158,
+  "phase_timings": {
+    "initialization": 1761676415.262303,
+    "attack_execution": 1761676415.272906,
+    "monitoring_accumulation": 1761676437.7498345,
+    "agent_analysis": 1761676442.7505333,
+    "firewall_update_wait": 1761676598.316887,
+    "metrics_collection": 1761676600.3182375,
+    "epoch_complete": 1761676600.3279762
+  },
+  "services_detected": [
+    "HTTP(172.20.0.10:80)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.10",
+    "service": "cve-2021-22205-gitlab-1-proxy",
+    "current_level": 25,
+    "epoch": 10
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.8",
+      "service": "cve-2024-36401-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.30",
+      "service": "cve-2013-4547-nginx-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 0,
+      "level_new": 25,
+      "changed": true,
+      "evidence_quotes": [
+        "POSSBL PORT SCAN (NMAP -sS)"
+      ]
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.8",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.30",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      }
+    ],
+    "interesting": []
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "gitlab:172.20.0.10:80",
+      "service": "gitlab",
+      "host": "172.20.0.10",
+      "port": "80",
+      "url": "http://172.20.0.10:80",
+      "version": "13.12.3",
+      "first_exposed_epoch": 10,
+      "local_epoch": 1,
+      "allowed_phase": "initial-access/rce",
+      "rotation_attempt_prob": 1,
+      "attempted": [
+        true,
+        1.0
+      ]
+    }
+  ],
+  "lockdown_activated": false
+}

@@ -48,7 +48,6 @@ class ContainersExploitationUpdate(BaseModel):
 class DeltaOutput(BaseModel):
     reasoning: str
     edge_updates: List[EdgeUpdate] = []
-    #containers_exploitation_updates: List[ContainersExploitationUpdate] = []
 
 PHASE_RANK = {
   "scan":0,
