@@ -55,13 +55,10 @@ outputs:
       enabled: yes
       filetype: regular
       filename: eve.json
-      #threaded: false
       append: yes
       flush: yes
-      
       # Optimized for AI processing
       community-id: true
-      community-id-seed: 0
       
       # Disable X-Forwarded-For processing to reduce complexity
       xff:
@@ -98,21 +95,15 @@ af-packet:
     cluster-id: 99
     cluster-type: cluster_flow
     defrag: yes
-    ring-size: 2048
-    snaplen: 0
-    bpf-filter: not net 192.168.200.0/24
-    
-
-  - interface: eth1
-    threads: 2
-    cluster-id: 98
-    cluster-type: cluster_flow
-    defrag: yes
-    ring-size: 2048
-    snaplen: 0
+    ring-size: 65535
+    snaplen: 32768
+    tpacket-v3: yes
+    use-mmap: yes
+    block-size: 1048576
+    block-timeout: 10
     bpf-filter: not net 192.168.200.0/24
 
-
+runmode: workers
 # Application layer protocols - focused on attack vectors
 app-layer:
   protocols:
@@ -197,42 +188,41 @@ logging:
 
 # Resource-optimized settings
 host-mode: auto
-max-pending-packets: 1024
+max-pending-packets: 32768
 
 # Optimized flow and memory settings for container
 flow:
-  memcap: 32 mb                           # Reduced memory usage
-  hash-size: 16384                         # Smaller hash table
-  prealloc: 2048                           # Fewer preallocated flows
+  memcap: 256 mb                           # Reduced memory usage
+  hash-size: 65536                         # Smaller hash table
+  prealloc: 8192                       # Fewer preallocated flows
   emergency-recovery: 30
 
 # Reduced stream reassembly for efficiency
 stream:
-  memcap: 16 mb                           # Reduced memory
-  checksum-validation: yes
+  memcap: 256 mb                           # Reduced memory
+  checksum-validation: no
   inline: auto
   reassembly:
     enabled: yes
-    memcap: 32 mb                         # Reduced reassembly memory
-    depth: 1 mb                         # Smaller reassembly depth
-    toserver-chunk-size: 1280
-    toclient-chunk-size: 1280
+    memcap: 156 mb                         # Reduced reassembly memory
+    depth: 8 mb                         # Smaller reassembly depth
+    toserver-chunk-size: 4096
+    toclient-chunk-size: 4096
     randomize-chunk-size: no               # Disable for consistency
 
-# Minimal defragmentation
 defrag:
-  memcap: 8 mb                            # Reduced memory
-  hash-size: 16384
-  trackers: 16384
-  max-frags: 16384
+  memcap: 256 mb                            # Reduced memory
+  hash-size: 65536
+  trackers: 65536
+  max-frags: 65536
   prealloc: yes
   timeout: 60
 
 # Optimized host table
 host:
-  hash-size: 2048                          # Smaller hash table
-  prealloc: 512
-  memcap: 8 mb                            # Reduced memory
+  hash-size: 16384                         # Smaller hash table
+  prealloc: 4096
+  memcap: 32 mb                            # Reduced memory
 
 # Reduced flow timeouts for faster detection
 flow-timeouts:
@@ -264,15 +254,15 @@ flow-timeouts:
 
 # Optimized detection engine
 detect:
-  profile: medium                             # Low profile for resource efficiency
-  sgh-mpm-context: single                  # Single context for efficiency
+  profile: medium
+  sgh-mpm-context: single                  
   prefilter:
     default: mpm
 
 # Basic threading for container environment
 threading:
-  set-cpu-affinity: no
-  detect-thread-ratio: 1.0
+  set-cpu-affinity: yes
+  detect-thread-ratio: 2.0
 
 # Disable profiling to save resources
 profiling:
@@ -284,7 +274,7 @@ profiling:
     enabled: no
 
 # Pattern matching algorithms
-mpm-algo: auto
+mpm-algo: hs
 spm-algo: auto
 
 # Minimal decoder settings

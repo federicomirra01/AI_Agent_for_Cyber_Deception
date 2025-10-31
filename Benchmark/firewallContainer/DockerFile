@@ -1,4 +1,4 @@
-# VM4 Firewall/Router Container
+# Firewall/Router Container
 FROM ubuntu:22.04
 
 # Prevent interactive prompts during package installation
@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install required packages
 RUN apt-get update && apt-get install -y \
     iptables \
+    ethtool \
     iptables-persistent \
     python3 \
     python3-pip \
@@ -45,7 +46,8 @@ COPY firewall_scripts/init_firewall.sh /firewall/scripts/
 COPY firewall_scripts/setup_routing.sh /firewall/scripts/
 COPY firewall_scripts/suricata_API.py /firewall/scripts
 COPY startup.sh /firewall/
-
+COPY netmap.sh /usr/local/bin/netmap.sh
+RUN chmod +x /usr/local/bin/netmap.sh
 # Make scripts executable
 RUN chmod +x /firewall/scripts/*.sh /firewall/startup.sh
 
@@ -54,7 +56,6 @@ RUN touch /var/log/syslog /firewall/logs/firewall.log /suricata/logs/suricata_AP
 
 # Set working directory
 WORKDIR /firewall
-
 # Enable IP forwarding in the container
 RUN echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
 RUN echo 'net.ipv6.conf.all.forwarding=1' >> /etc/sysctl.conf
@@ -66,5 +67,6 @@ EXPOSE 5000 7000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:5000/health || exit 1
 
+ENTRYPOINT ["/usr/local/bin/netmap.sh"]
 # Start the firewall container
 CMD ["/firewall/startup.sh"]
