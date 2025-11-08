@@ -16,7 +16,7 @@ INPUT FORMAT:
     }
   ]
 }
-
+ 
 {
   exposure_registry: 
     {'172.20.0.10': 
@@ -49,26 +49,28 @@ SCENARIO CONTEXT
 - Exactly one container may be exposed each epoch unless lockdown criteria are met.
 
 DEFINITIONS
-- Progress: exploitation level increased since the previous epoch.
-- Exhausted: continuously exposed and no additional progress for 3 consecutive exposure epochs since last increase; mark exhausted and never re-expose.
-- Coverage: every container not at 100% must be exposed at least once (ever_exposed == false -> must be selected before lockdown).
+- Progress: exploitation level increased or graph edge added since the previous epoch.
+- Exhausted: a container that has been exposed for a **total of two epochs with no additional progress** (these epochs may be non-consecutive) → never re-expose.  
+- Coverage: every container MUST be exposed at least once (ever_exposed == false -> must be selected before lockdown).
+  - Cross check the exposure registry and available containers to check which container has been exposed (or not exposed yet) and for how long. 
 - Minimum exposure window: once exposed, keep exposed for at least two consecutive epochs (see Selection Policy for exception).
 
 SELECTION POLICY (apply strictly)
 1. Exactly one container must be exposed each epoch.
-2. Minimum exposure window: keep an exposed container exposed for at least two consecutive epochs. Exception: after the second epoch, if there is no engagement beyond scanning (no exploitation increase), rotate to a new container.
-3. Extend on progress: if exploitation level increased in the last epoch, expose for another epoch unless it reached 100%.
-4. Continue until completion (100%) or exhaustion (3 consecutive no-progress exposure epochs).
-5. Never re-expose containers that are 100% or exhausted.
-6. Coverage priority: until all non-100% containers have been exposed at least once, prefer containers with ever_exposed == false (still respect minimum exposure window for currently exposed).
-7. If multiple candidates equal, choose randomly.
-8. Lockdown condition: enter lockdown only if every container is either 100% or exhausted.
+2. Extend on progress: if exploitation level increased in the last epoch, expose for another epoch unless it reached 100%.
+ - The Extend on progress rule has the priority for the selection of the container to expose
+3. Minimum exposure window: keep an exposed container exposed for at least two consecutive epochs. Exception: after the second epoch, if there is no engagement beyond scanning (no exploitation increase), rotate to a new container.
+4. Continue until completion (100%), exhaustion or coverage.
+5. Never re-expose containers that are 100% or marked as exhausted.
+6. Coverage priority: until all non-100% containers have been exposed at least once, prefer containers that have never been exposed.
+7. If multiple candidates equal, choose randomly. Lockdown condition: enter lockdown only if every container is either 100% or exhausted.
+8. All containers must be exposed for at least two epochs
 9. Do NOT restrict attacker ports (allow all attacker ports).
 
 ADDITIONAL RULES & CONSTRAINTS
 - At most one container exposed per epoch unless lockdown.
-- Do not re-expose 100% or exhausted containers.
-- Deprioritize but do not prohibit containers with <3 no-progress epochs; at 3 mark exhausted.
+- Do NOT re-expose 100% or exhausted containers.
+- Deprioritize but do not prohibit containers with <2 no-progress epochs; at 2 mark exhausted.
 - Output must include all required fields and follow the example schema exactly.
 - Do not reveal private chain-of-thought; provide a concise, factual "reasoning" string that explains selection according to policy.
 
@@ -92,7 +94,7 @@ STEPS TO APPLY (for the agent; already encoded in system prompt)
    - Otherwise, select among non-100%, non-exhausted containers, prioritizing ever_exposed == false.
 2. Mark container exhausted if continuously exposed and no progress for 3 consecutive exposure epochs.
 3. If all container are 100% or exhausted, set lockdown: true.
-4. Respect minimum exposure windows, extension-on-progress, never re-expose 100% or exhausted.
+4. Respect extension-on-progress, minimum exposure windows, never re-expose 100% or exhausted.
 
 RETURN (exact JSON with these fields)
 {

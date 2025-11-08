@@ -1,0 +1,160 @@
+{
+  "epoch_number": 7,
+  "start_time": 1762361302.2072995,
+  "end_time": 1762361347.9689338,
+  "phase_timings": {
+    "initialization": 1762361302.207343,
+    "attack_execution": 1762361302.2211552,
+    "monitoring_accumulation": 1762361330.3150268,
+    "agent_analysis": 1762361335.316953,
+    "firewall_update_wait": 1762361345.9547753,
+    "metrics_collection": 1762361347.9558992,
+    "epoch_complete": 1762361347.9680996
+  },
+  "services_detected": [
+    "HTTP(172.20.0.10:80)"
+  ],
+  "services_successfully_exploited": [
+    "GITLAB"
+  ],
+  "exploits_attempted": [],
+  "flags_captured": [
+    {
+      "service": "GITLAB",
+      "flag": "flag{user_access_gitlab}"
+    }
+  ],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [
+    {
+      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
+    },
+    {
+      "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
+    }
+  ],
+  "firewall_rules_removed": [
+    {
+      "rules_removed_current_epoch": [
+        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.10          192.168.100.0/24",
+        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.10"
+      ]
+    }
+  ],
+  "selected_container": {
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
+    "current_level": 0,
+    "epoch": 7
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 50,
+      "level_new": 50,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "ET WEB_SERVER Possible bash shell piped to dev tcp Inbound to WebServer M3"
+            ]
+          }
+        ],
+        "current_phase": "initial-access/rce",
+        "vector": "initial-access/rce"
+      }
+    ],
+    "interesting": []
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "gitlab:172.20.0.10:80",
+      "service": "gitlab",
+      "host": "172.20.0.10",
+      "port": "80",
+      "url": "http://172.20.0.10:80",
+      "version": "13.12.3",
+      "first_exposed_epoch": 6,
+      "local_epoch": 2,
+      "allowed_phase": "data-exfil",
+      "rotation_attempt_prob": 1,
+      "attempted": [
+        true,
+        1.0
+      ]
+    }
+  ],
+  "lockdown_activated": false
+}

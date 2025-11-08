@@ -1,0 +1,181 @@
+{
+  "epoch_number": 8,
+  "start_time": 1762536221.9800825,
+  "end_time": 1762536271.8766558,
+  "phase_timings": {
+    "initialization": 1762536221.9800937,
+    "attack_execution": 1762536221.992982,
+    "monitoring_accumulation": 1762536258.5668592,
+    "agent_analysis": 1762536263.5680795,
+    "firewall_update_wait": 1762536269.865001,
+    "metrics_collection": 1762536271.8661108,
+    "epoch_complete": 1762536271.8761647
+  },
+  "services_detected": [
+    "HTTP(172.20.0.10:80)"
+  ],
+  "services_successfully_exploited": [
+    "GITLAB"
+  ],
+  "exploits_attempted": [],
+  "flags_captured": [
+    {
+      "service": "GITLAB",
+      "flag": "flag{user_access_gitlab}"
+    },
+    {
+      "service": "GITLAB",
+      "flag": "flag{privileged_access_gitlab}"
+    }
+  ],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [
+    {
+      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
+    },
+    {
+      "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
+    }
+  ],
+  "firewall_rules_removed": [
+    {
+      "rules_removed_current_epoch": [
+        "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.10          192.168.100.0/24",
+        "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.10"
+      ]
+    }
+  ],
+  "selected_container": {
+    "ip": "172.20.0.3",
+    "service": "s2-057-struts2-1",
+    "current_level": 0,
+    "epoch": 8
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 75,
+      "level_new": 75,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n",
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n",
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.10\nUser-Agent: curl/8.15.0\nAccept: */*\n\n",
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "ET WEB_SERVER Possible bash shell piped to dev tcp Inbound to WebServer M3"
+            ]
+          },
+          {
+            "phase": "data-exfil-user",
+            "evidence_quotes": [
+              "User-Level File Discovery",
+              "find / -type f -name 'user.txt' 2>/dev/null\ncat /home/ctf/user.txt\n"
+            ]
+          }
+        ],
+        "current_phase": "data-exfil-user",
+        "vector": "data-exfil-user"
+      }
+    ],
+    "interesting": [
+      {
+        "ip": "172.20.0.10",
+        "service": "cve-2021-22205-gitlab-1-proxy"
+      }
+    ]
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "gitlab:172.20.0.10:80",
+      "service": "gitlab",
+      "host": "172.20.0.10",
+      "port": "80",
+      "url": "http://172.20.0.10:80",
+      "version": "13.12.3",
+      "first_exposed_epoch": 6,
+      "local_epoch": 3,
+      "allowed_phase": "privilege_escalation",
+      "rotation_attempt_prob": 1,
+      "attempted": [
+        true,
+        1.0
+      ]
+    }
+  ],
+  "lockdown_activated": false
+}

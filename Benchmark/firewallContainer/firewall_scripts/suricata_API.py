@@ -1,7 +1,7 @@
 import json
 import threading
 import time
-from collections import deque, defaultdict
+from collections import deque
 from flask import Flask, request, jsonify
 from datetime import datetime
 import os

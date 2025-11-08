@@ -36,7 +36,7 @@ class AgentState:
         self.firewall_config = kwargs.get('firewall_config', [])
         self.vulnerable_containers = kwargs.get('vulnerable_containers', [])
     
-        # Summarize Agent Field
+        # Network Agent Field
         self.security_events = kwargs.get('security_events', [])
     
         # Inference Agent Field

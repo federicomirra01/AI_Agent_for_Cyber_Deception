@@ -1,0 +1,109 @@
+{
+  "epoch_number": 4,
+  "start_time": 1762535554.177841,
+  "end_time": 1762535585.3454366,
+  "phase_timings": {
+    "initialization": 1762535554.1778488,
+    "attack_execution": 1762535554.186165,
+    "monitoring_accumulation": 1762535570.3852057,
+    "agent_analysis": 1762535575.388338,
+    "firewall_update_wait": 1762535583.3337798,
+    "metrics_collection": 1762535585.3367937,
+    "epoch_complete": 1762535585.344773
+  },
+  "services_detected": [
+    "PATROL-SNMP(172.20.0.4:8161)",
+    "UNKNOWN(172.20.0.4:61616)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.4",
+    "service": "cve-2015-5254-activemq-1",
+    "current_level": 25,
+    "epoch": 4
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 0,
+      "level_new": 25,
+      "changed": true,
+      "evidence_quotes": [
+        "ET INFO POSSIBLE Web Crawl using Curl"
+      ]
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET INFO POSSIBLE Web Crawl using Curl",
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)",
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "ET INFO POSSIBLE Web Crawl using Curl",
+              "ET SCAN Suspicious inbound to MSSQL port 1433",
+              "ET SCAN Suspicious inbound to mySQL port 3306",
+              "POSSBL PORT SCAN (NMAP -sS)",
+              "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      }
+    ],
+    "interesting": []
+  },
+  "service_epoch_context": [],
+  "lockdown_activated": false
+}

@@ -1,0 +1,1423 @@
+{
+  "config": {
+    "max_epochs": 20,
+    "attacker_image": "attacker:latest",
+    "attacker_container_name": "attackercontainer-attacker",
+    "attack_duration": 240,
+    "monitor_accumulation_wait": 5,
+    "firewall_update_wait": 2,
+    "between_epoch_wait": 1,
+    "attacker_network": "192.168.100.0/24",
+    "containers_network": "172.20.0.0/24",
+    "firewall_api_url": "http://192.168.200.2:5000",
+    "allow_full_compromise": true,
+    "stop_on_lockdown": true,
+    "clear_memory_between_epochs": false,
+    "mode": "probabilistic",
+    "results_dir": "./benchmark/benchmark_results",
+    "dir_name": "test_1",
+    "save_detailed_logs": true,
+    "log_level": "INFO"
+  },
+  "start_time": 1762536927.2707558,
+  "end_time": 1762537247.6439946,
+  "total_epochs": 9,
+  "epochs": [
+    {
+      "epoch_number": 1,
+      "start_time": 1762536927.2707558,
+      "end_time": 1762536957.2974417,
+      "phase_timings": {
+        "initialization": 1762536927.2707772,
+        "attack_execution": 1762536927.2841084,
+        "monitoring_accumulation": 1762536944.3761342,
+        "agent_analysis": 1762536949.3771634,
+        "firewall_update_wait": 1762536955.2810297,
+        "metrics_collection": 1762536957.2830095,
+        "epoch_complete": 1762536957.295756
+      },
+      "services_detected": [],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [
+        {
+          "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.5 (tcp)"
+        },
+        {
+          "rules_added_current_epoch": "ALLOW 172.20.0.5 -> 192.168.100.0/24 (tcp)"
+        }
+      ],
+      "firewall_rules_removed": [],
+      "selected_container": {
+        "ip": "172.20.0.5",
+        "service": "cve-2014-6271-web-1",
+        "current_level": 0,
+        "epoch": 1
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [],
+        "interesting": []
+      },
+      "service_epoch_context": [],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 2,
+      "start_time": 1762536958.3034232,
+      "end_time": 1762536988.2414844,
+      "phase_timings": {
+        "initialization": 1762536958.3034477,
+        "attack_execution": 1762536958.316684,
+        "monitoring_accumulation": 1762536973.9246914,
+        "agent_analysis": 1762536978.9254296,
+        "firewall_update_wait": 1762536986.2287946,
+        "metrics_collection": 1762536988.230499,
+        "epoch_complete": 1762536988.240866
+      },
+      "services_detected": [
+        "HTTP(172.20.0.5:80)"
+      ],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [],
+      "firewall_rules_removed": [],
+      "selected_container": {
+        "ip": "172.20.0.5",
+        "service": "cve-2014-6271-web-1",
+        "current_level": 25,
+        "epoch": 2
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 0,
+          "level_new": 25,
+          "changed": true,
+          "evidence_quotes": [
+            "ET INFO POSSIBLE Web Crawl using Curl"
+          ]
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          }
+        ],
+        "interesting": []
+      },
+      "service_epoch_context": [],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 3,
+      "start_time": 1762536989.2454848,
+      "end_time": 1762537019.3853123,
+      "phase_timings": {
+        "initialization": 1762536989.245498,
+        "attack_execution": 1762536989.2580187,
+        "monitoring_accumulation": 1762537004.836619,
+        "agent_analysis": 1762537009.8382678,
+        "firewall_update_wait": 1762537017.3695188,
+        "metrics_collection": 1762537019.3706915,
+        "epoch_complete": 1762537019.38442
+      },
+      "services_detected": [
+        "HTTP(172.20.0.5:80)"
+      ],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [
+        {
+          "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.4 (tcp)"
+        },
+        {
+          "rules_added_current_epoch": "ALLOW 172.20.0.4 -> 192.168.100.0/24 (tcp)"
+        }
+      ],
+      "firewall_rules_removed": [
+        {
+          "rules_removed_current_epoch": [
+            "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.5           192.168.100.0/24",
+            "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.5"
+          ]
+        }
+      ],
+      "selected_container": {
+        "ip": "172.20.0.4",
+        "service": "cve-2015-5254-activemq-1",
+        "current_level": 0,
+        "epoch": 3
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          }
+        ],
+        "interesting": []
+      },
+      "service_epoch_context": [],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 4,
+      "start_time": 1762537020.389557,
+      "end_time": 1762537049.9472802,
+      "phase_timings": {
+        "initialization": 1762537020.3895707,
+        "attack_execution": 1762537020.4019158,
+        "monitoring_accumulation": 1762537036.220157,
+        "agent_analysis": 1762537041.2211504,
+        "firewall_update_wait": 1762537047.935179,
+        "metrics_collection": 1762537049.9360769,
+        "epoch_complete": 1762537049.9467452
+      },
+      "services_detected": [
+        "UNKNOWN(172.20.0.4:61616)",
+        "PATROL-SNMP(172.20.0.4:8161)"
+      ],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [],
+      "firewall_rules_removed": [],
+      "selected_container": {
+        "ip": "172.20.0.4",
+        "service": "cve-2015-5254-activemq-1",
+        "current_level": 25,
+        "epoch": 4
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 0,
+          "level_new": 25,
+          "changed": true,
+          "evidence_quotes": [
+            "ET INFO POSSIBLE Web Crawl using Curl"
+          ]
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.4",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          }
+        ],
+        "interesting": []
+      },
+      "service_epoch_context": [],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 5,
+      "start_time": 1762537050.9518619,
+      "end_time": 1762537079.222837,
+      "phase_timings": {
+        "initialization": 1762537050.9518802,
+        "attack_execution": 1762537050.9610147,
+        "monitoring_accumulation": 1762537066.9219236,
+        "agent_analysis": 1762537071.9238758,
+        "firewall_update_wait": 1762537077.202189,
+        "metrics_collection": 1762537079.204186,
+        "epoch_complete": 1762537079.2216105
+      },
+      "services_detected": [
+        "PATROL-SNMP(172.20.0.4:8161)",
+        "UNKNOWN(172.20.0.4:61616)"
+      ],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [
+        {
+          "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.3 (tcp)"
+        },
+        {
+          "rules_added_current_epoch": "ALLOW 172.20.0.3 -> 192.168.100.0/24 (tcp)"
+        }
+      ],
+      "firewall_rules_removed": [
+        {
+          "rules_removed_current_epoch": [
+            "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.4           192.168.100.0/24",
+            "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.4"
+          ]
+        }
+      ],
+      "selected_container": {
+        "ip": "172.20.0.3",
+        "service": "s2-057-struts2-1",
+        "current_level": 0,
+        "epoch": 5
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.4",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          }
+        ],
+        "interesting": []
+      },
+      "service_epoch_context": [],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 6,
+      "start_time": 1762537080.2291627,
+      "end_time": 1762537114.0812347,
+      "phase_timings": {
+        "initialization": 1762537080.2291894,
+        "attack_execution": 1762537080.2400198,
+        "monitoring_accumulation": 1762537097.923035,
+        "agent_analysis": 1762537102.9240928,
+        "firewall_update_wait": 1762537112.063981,
+        "metrics_collection": 1762537114.065695,
+        "epoch_complete": 1762537114.0801575
+      },
+      "services_detected": [
+        "HTTP-PROXY(172.20.0.3:8080)"
+      ],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [],
+      "firewall_rules_removed": [],
+      "selected_container": {
+        "ip": "172.20.0.3",
+        "service": "s2-057-struts2-1",
+        "current_level": 50,
+        "epoch": 6
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 0,
+          "level_new": 50,
+          "changed": true,
+          "evidence_quotes": [
+            "ET EXPLOIT Apache Struts Possible OGNL Java Exec In URI"
+          ]
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.4",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.3",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)"
+                ]
+              },
+              {
+                "phase": "initial-access/rce",
+                "evidence_quotes": [
+                  "ET EXPLOIT Apache Struts Possible OGNL Java Exec In URI",
+                  "ET WEB_SERVER Possible Apache Struts OGNL in Dynamic Action",
+                  "ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt",
+                  "ET WEB_SPECIFIC_APPS Apache Struts ognl inbound OGNL injection remote code execution attempt",
+                  "ET HUNTING .exec in HTTP URI Inbound - Possible Exploit Activity"
+                ]
+              }
+            ],
+            "current_phase": "initial-access/rce",
+            "vector": "initial-access/rce"
+          }
+        ],
+        "interesting": []
+      },
+      "service_epoch_context": [
+        {
+          "service_id": "struts:172.20.0.3:8080",
+          "service": "struts",
+          "host": "172.20.0.3",
+          "port": "8080",
+          "path": "struts2-showcase",
+          "first_exposed_epoch": 6,
+          "local_epoch": 1,
+          "allowed_phase": "initial-access/rce",
+          "rotation_attempt_prob": 1,
+          "attempted": [
+            true,
+            1.0
+          ]
+        }
+      ],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 7,
+      "start_time": 1762537115.08579,
+      "end_time": 1762537152.9273188,
+      "phase_timings": {
+        "initialization": 1762537115.0858028,
+        "attack_execution": 1762537115.0953486,
+        "monitoring_accumulation": 1762537138.706712,
+        "agent_analysis": 1762537143.708184,
+        "firewall_update_wait": 1762537150.9097311,
+        "metrics_collection": 1762537152.9114828,
+        "epoch_complete": 1762537152.9261625
+      },
+      "services_detected": [
+        "HTTP-PROXY(172.20.0.3:8080)"
+      ],
+      "services_successfully_exploited": [
+        "STRUTS"
+      ],
+      "exploits_attempted": [],
+      "flags_captured": [
+        {
+          "service": "STRUTS",
+          "flag": "flag{privileged_access_struts}"
+        }
+      ],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [
+        {
+          "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.10 (tcp)"
+        },
+        {
+          "rules_added_current_epoch": "ALLOW 172.20.0.10 -> 192.168.100.0/24 (tcp)"
+        }
+      ],
+      "firewall_rules_removed": [
+        {
+          "rules_removed_current_epoch": [
+            "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.3           192.168.100.0/24",
+            "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.3"
+          ]
+        }
+      ],
+      "selected_container": {
+        "ip": "172.20.0.10",
+        "service": "cve-2021-22205-gitlab-1-proxy",
+        "current_level": 0,
+        "epoch": 7
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 0,
+          "level_new": 0,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 50,
+          "level_new": 100,
+          "changed": true,
+          "evidence_quotes": [
+            "cat /root/root.txt"
+          ]
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.4",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.3",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)"
+                ]
+              },
+              {
+                "phase": "initial-access/rce",
+                "evidence_quotes": [
+                  "ET EXPLOIT Apache Struts Possible OGNL Java Exec In URI",
+                  "ET WEB_SERVER Possible Apache Struts OGNL in Dynamic Action",
+                  "ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt",
+                  "ET WEB_SPECIFIC_APPS Apache Struts ognl inbound OGNL injection remote code execution attempt",
+                  "ET HUNTING .exec in HTTP URI Inbound - Possible Exploit Activity"
+                ]
+              },
+              {
+                "phase": "privilege-escalation",
+                "evidence_quotes": [
+                  "inferred from later phase: cat /root/root.txt"
+                ]
+              },
+              {
+                "phase": "data-exfil-root",
+                "evidence_quotes": [
+                  "cat /root/root.txt"
+                ]
+              }
+            ],
+            "current_phase": "data-exfil-root",
+            "vector": "data-exfil-root"
+          }
+        ],
+        "interesting": [
+          {
+            "ip": "172.20.0.3",
+            "service": "s2-057-struts2-1"
+          }
+        ]
+      },
+      "service_epoch_context": [
+        {
+          "service_id": "struts:172.20.0.3:8080",
+          "service": "struts",
+          "host": "172.20.0.3",
+          "port": "8080",
+          "path": "struts2-showcase",
+          "first_exposed_epoch": 6,
+          "local_epoch": 2,
+          "allowed_phase": "data-exfil",
+          "rotation_attempt_prob": 1,
+          "attempted": [
+            true,
+            1.0
+          ]
+        }
+      ],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 8,
+      "start_time": 1762537153.932444,
+      "end_time": 1762537191.177775,
+      "phase_timings": {
+        "initialization": 1762537153.9324572,
+        "attack_execution": 1762537153.9444587,
+        "monitoring_accumulation": 1762537175.8722913,
+        "agent_analysis": 1762537180.8730893,
+        "firewall_update_wait": 1762537189.162943,
+        "metrics_collection": 1762537191.1646852,
+        "epoch_complete": 1762537191.1767936
+      },
+      "services_detected": [
+        "HTTP(172.20.0.10:80)"
+      ],
+      "services_successfully_exploited": [],
+      "exploits_attempted": [],
+      "flags_captured": [],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [],
+      "firewall_rules_removed": [],
+      "selected_container": {
+        "ip": "172.20.0.10",
+        "service": "cve-2021-22205-gitlab-1-proxy",
+        "current_level": 25,
+        "epoch": 8
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 100,
+          "level_new": 100,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.4",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.3",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)"
+                ]
+              },
+              {
+                "phase": "initial-access/rce",
+                "evidence_quotes": [
+                  "ET EXPLOIT Apache Struts Possible OGNL Java Exec In URI",
+                  "ET WEB_SERVER Possible Apache Struts OGNL in Dynamic Action",
+                  "ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt",
+                  "ET WEB_SPECIFIC_APPS Apache Struts ognl inbound OGNL injection remote code execution attempt",
+                  "ET HUNTING .exec in HTTP URI Inbound - Possible Exploit Activity"
+                ]
+              },
+              {
+                "phase": "privilege-escalation",
+                "evidence_quotes": [
+                  "inferred from later phase: cat /root/root.txt"
+                ]
+              },
+              {
+                "phase": "data-exfil-root",
+                "evidence_quotes": [
+                  "cat /root/root.txt"
+                ]
+              }
+            ],
+            "current_phase": "data-exfil-root",
+            "vector": "data-exfil-root"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.10",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "GET /examples HTTP/1.1\nHost: 172.20.0.10\nUser-Agent: curl/8.15.0\nAccept: */*\n\n",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          }
+        ],
+        "interesting": [
+          {
+            "ip": "172.20.0.3",
+            "service": "s2-057-struts2-1"
+          }
+        ]
+      },
+      "service_epoch_context": [
+        {
+          "service_id": "gitlab:172.20.0.10:80",
+          "service": "gitlab",
+          "host": "172.20.0.10",
+          "port": "80",
+          "url": "http://172.20.0.10:80",
+          "version": "13.12.3",
+          "first_exposed_epoch": 8,
+          "local_epoch": 1,
+          "allowed_phase": "initial-access/rce",
+          "rotation_attempt_prob": 1,
+          "attempted": [
+            true,
+            1.0
+          ]
+        }
+      ],
+      "lockdown_activated": false
+    },
+    {
+      "epoch_number": 9,
+      "start_time": 1762537192.1821082,
+      "end_time": 1762537247.6439946,
+      "phase_timings": {
+        "initialization": 1762537192.1821213,
+        "attack_execution": 1762537192.1942503,
+        "monitoring_accumulation": 1762537220.111969,
+        "agent_analysis": 1762537225.1127563,
+        "firewall_update_wait": 1762537245.624594,
+        "metrics_collection": 1762537247.6254482,
+        "epoch_complete": 1762537247.6430392
+      },
+      "services_detected": [
+        "HTTP(172.20.0.10:80)"
+      ],
+      "services_successfully_exploited": [
+        "GITLAB"
+      ],
+      "exploits_attempted": [],
+      "flags_captured": [
+        {
+          "service": "GITLAB",
+          "flag": "flag{user_access_gitlab}"
+        }
+      ],
+      "attack_success_rate": 0.0,
+      "firewall_rules_added": [],
+      "firewall_rules_removed": [
+        {
+          "rules_removed_current_epoch": [
+            "REMOVED rule #1:    ACCEPT     tcp  --  172.20.0.10          192.168.100.0/24",
+            "REMOVED rule #2:    ACCEPT     tcp  --  192.168.100.0/24     172.20.0.10"
+          ]
+        }
+      ],
+      "selected_container": {
+        "ip": "none",
+        "service": "none",
+        "current_level": 0,
+        "epoch": 9
+      },
+      "containers_exploitation": [
+        {
+          "ip": "172.20.0.5",
+          "service": "cve-2014-6271-web-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.4",
+          "service": "cve-2015-5254-activemq-1",
+          "level_prev": 25,
+          "level_new": 25,
+          "changed": false,
+          "evidence_quotes": []
+        },
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy",
+          "level_prev": 25,
+          "level_new": 75,
+          "changed": true,
+          "evidence_quotes": [
+            "User-Level File Discovery"
+          ]
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1",
+          "level_prev": 100,
+          "level_new": 100,
+          "changed": false,
+          "evidence_quotes": []
+        }
+      ],
+      "inferred_attack_graph": {
+        "edges": [
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.5",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.4",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)",
+                  "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+                ]
+              }
+            ],
+            "current_phase": "scan",
+            "vector": "scan"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.3",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)"
+                ]
+              },
+              {
+                "phase": "initial-access/rce",
+                "evidence_quotes": [
+                  "ET EXPLOIT Apache Struts Possible OGNL Java Exec In URI",
+                  "ET WEB_SERVER Possible Apache Struts OGNL in Dynamic Action",
+                  "ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt",
+                  "ET WEB_SPECIFIC_APPS Apache Struts ognl inbound OGNL injection remote code execution attempt",
+                  "ET HUNTING .exec in HTTP URI Inbound - Possible Exploit Activity"
+                ]
+              },
+              {
+                "phase": "privilege-escalation",
+                "evidence_quotes": [
+                  "inferred from later phase: cat /root/root.txt"
+                ]
+              },
+              {
+                "phase": "data-exfil-root",
+                "evidence_quotes": [
+                  "cat /root/root.txt"
+                ]
+              }
+            ],
+            "current_phase": "data-exfil-root",
+            "vector": "data-exfil-root"
+          },
+          {
+            "from": "192.168.100.2",
+            "to": "172.20.0.10",
+            "phases": [
+              {
+                "phase": "scan",
+                "evidence_quotes": [
+                  "ET INFO POSSIBLE Web Crawl using Curl",
+                  "GET /examples HTTP/1.1\nHost: 172.20.0.10\nUser-Agent: curl/8.15.0\nAccept: */*\n\n",
+                  "ET SCAN Suspicious inbound to MSSQL port 1433",
+                  "ET SCAN Suspicious inbound to mySQL port 3306",
+                  "POSSBL PORT SCAN (NMAP -sS)"
+                ]
+              },
+              {
+                "phase": "initial-access/rce",
+                "evidence_quotes": [
+                  "ET WEB_SERVER Possible bash shell piped to dev tcp Inbound to WebServer M3"
+                ]
+              },
+              {
+                "phase": "data-exfil-user",
+                "evidence_quotes": [
+                  "User-Level File Discovery",
+                  "cat /home/ctf/user.txt\n"
+                ]
+              }
+            ],
+            "current_phase": "data-exfil-user",
+            "vector": "data-exfil-user"
+          }
+        ],
+        "interesting": [
+          {
+            "ip": "172.20.0.10",
+            "service": "cve-2021-22205-gitlab-1-proxy"
+          },
+          {
+            "ip": "172.20.0.3",
+            "service": "s2-057-struts2-1"
+          }
+        ]
+      },
+      "service_epoch_context": [
+        {
+          "service_id": "gitlab:172.20.0.10:80",
+          "service": "gitlab",
+          "host": "172.20.0.10",
+          "port": "80",
+          "url": "http://172.20.0.10:80",
+          "version": "13.12.3",
+          "first_exposed_epoch": 8,
+          "local_epoch": 2,
+          "allowed_phase": "data-exfil",
+          "rotation_attempt_prob": 1,
+          "attempted": [
+            true,
+            1.0
+          ]
+        }
+      ],
+      "lockdown_activated": true
+    }
+  ],
+  "summary": {
+    "total_flags_captured": 2,
+    "average_epoch_duration": 34.703787909613716,
+    "lockdown_triggered": true,
+    "lockdown_epoch": 9,
+    "final_containers_exploitation": [
+      {
+        "ip": "172.20.0.5",
+        "service": "cve-2014-6271-web-1",
+        "level_prev": 25,
+        "level_new": 25,
+        "changed": false,
+        "evidence_quotes": []
+      },
+      {
+        "ip": "172.20.0.4",
+        "service": "cve-2015-5254-activemq-1",
+        "level_prev": 25,
+        "level_new": 25,
+        "changed": false,
+        "evidence_quotes": []
+      },
+      {
+        "ip": "172.20.0.10",
+        "service": "cve-2021-22205-gitlab-1-proxy",
+        "level_prev": 25,
+        "level_new": 75,
+        "changed": true,
+        "evidence_quotes": [
+          "User-Level File Discovery"
+        ]
+      },
+      {
+        "ip": "172.20.0.3",
+        "service": "s2-057-struts2-1",
+        "level_prev": 100,
+        "level_new": 100,
+        "changed": false,
+        "evidence_quotes": []
+      }
+    ],
+    "final_inferred_attack_graph": {
+      "edges": [
+        {
+          "from": "192.168.100.2",
+          "to": "172.20.0.5",
+          "phases": [
+            {
+              "phase": "scan",
+              "evidence_quotes": [
+                "ET INFO POSSIBLE Web Crawl using Curl",
+                "ET SCAN Suspicious inbound to MSSQL port 1433",
+                "ET SCAN Suspicious inbound to mySQL port 3306",
+                "POSSBL PORT SCAN (NMAP -sS)",
+                "GET /showcase HTTP/1.1\nHost: 172.20.0.5\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+              ]
+            }
+          ],
+          "current_phase": "scan",
+          "vector": "scan"
+        },
+        {
+          "from": "192.168.100.2",
+          "to": "172.20.0.4",
+          "phases": [
+            {
+              "phase": "scan",
+              "evidence_quotes": [
+                "ET INFO POSSIBLE Web Crawl using Curl",
+                "ET SCAN Suspicious inbound to MSSQL port 1433",
+                "ET SCAN Suspicious inbound to mySQL port 3306",
+                "POSSBL PORT SCAN (NMAP -sS)",
+                "GET /showcase HTTP/1.1\nHost: 172.20.0.4:8161\nUser-Agent: curl/8.15.0\nAccept: */*\n\n"
+              ]
+            }
+          ],
+          "current_phase": "scan",
+          "vector": "scan"
+        },
+        {
+          "from": "192.168.100.2",
+          "to": "172.20.0.3",
+          "phases": [
+            {
+              "phase": "scan",
+              "evidence_quotes": [
+                "ET SCAN Suspicious inbound to MSSQL port 1433",
+                "ET SCAN Suspicious inbound to mySQL port 3306",
+                "POSSBL PORT SCAN (NMAP -sS)"
+              ]
+            },
+            {
+              "phase": "initial-access/rce",
+              "evidence_quotes": [
+                "ET EXPLOIT Apache Struts Possible OGNL Java Exec In URI",
+                "ET WEB_SERVER Possible Apache Struts OGNL in Dynamic Action",
+                "ET WEB_SPECIFIC_APPS Apache Struts java.lang inbound OGNL injection remote code execution attempt",
+                "ET WEB_SPECIFIC_APPS Apache Struts ognl inbound OGNL injection remote code execution attempt",
+                "ET HUNTING .exec in HTTP URI Inbound - Possible Exploit Activity"
+              ]
+            },
+            {
+              "phase": "privilege-escalation",
+              "evidence_quotes": [
+                "inferred from later phase: cat /root/root.txt"
+              ]
+            },
+            {
+              "phase": "data-exfil-root",
+              "evidence_quotes": [
+                "cat /root/root.txt"
+              ]
+            }
+          ],
+          "current_phase": "data-exfil-root",
+          "vector": "data-exfil-root"
+        },
+        {
+          "from": "192.168.100.2",
+          "to": "172.20.0.10",
+          "phases": [
+            {
+              "phase": "scan",
+              "evidence_quotes": [
+                "ET INFO POSSIBLE Web Crawl using Curl",
+                "GET /examples HTTP/1.1\nHost: 172.20.0.10\nUser-Agent: curl/8.15.0\nAccept: */*\n\n",
+                "ET SCAN Suspicious inbound to MSSQL port 1433",
+                "ET SCAN Suspicious inbound to mySQL port 3306",
+                "POSSBL PORT SCAN (NMAP -sS)"
+              ]
+            },
+            {
+              "phase": "initial-access/rce",
+              "evidence_quotes": [
+                "ET WEB_SERVER Possible bash shell piped to dev tcp Inbound to WebServer M3"
+              ]
+            },
+            {
+              "phase": "data-exfil-user",
+              "evidence_quotes": [
+                "User-Level File Discovery",
+                "cat /home/ctf/user.txt\n"
+              ]
+            }
+          ],
+          "current_phase": "data-exfil-user",
+          "vector": "data-exfil-user"
+        }
+      ],
+      "interesting": [
+        {
+          "ip": "172.20.0.10",
+          "service": "cve-2021-22205-gitlab-1-proxy"
+        },
+        {
+          "ip": "172.20.0.3",
+          "service": "s2-057-struts2-1"
+        }
+      ]
+    }
+  }
+}

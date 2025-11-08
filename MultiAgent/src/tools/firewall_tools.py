@@ -198,3 +198,20 @@ async def _remove_firewall_rule(rule_numbers: List[int]) -> Dict[str, Any]:
         logger.error(f"Failed to remove rules: {result['error']}")
     
     return {'rules_removed_current_epoch': rule_descriptions}
+
+async def reset_firewall_rules() -> Dict[str, Any]:
+    """
+    Get current firewall rules
+    
+    Returns:
+        Dict with success status and rules data
+    """
+    url = f"{FIREWALL_URL}/reset"
+    result = await _make_request_async("POST", url)
+    
+    if result['success']:
+        success = True # just to keep logger.info commented
+    else:
+        logger.error(f"Failed to get firewall rules: {result['error']}")
+        
+    return {'firewall_config' : result}

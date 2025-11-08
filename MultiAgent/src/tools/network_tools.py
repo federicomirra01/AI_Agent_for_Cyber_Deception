@@ -30,27 +30,27 @@ async def get_alerts(time_window: int = 5) -> Dict[str, Any]:
         
     return {'security_events' : alerts}
 
-# Retrieve Fast Alerts from fast.log
-async def get_fast_alerts(time_window: int = 5) -> Dict[str, Any]:
+# # Retrieve Fast Alerts from fast.log
+# async def get_fast_alerts(time_window: int = 5) -> Dict[str, Any]:
 
-    """
-    Get Suricata fast alerts for threat detection.
+#     """
+#     Get Suricata fast alerts for threat detection.
     
-    Args:
-        time_window: Analysis window in minutes (max 30)
+#     Args:
+#         time_window: Analysis window in minutes (max 30)
     
-    Returns:
-        Dict with Suricata fast alerts data
-    """
-    url = f"{SURICATA_URL}/fastlog"
-    params = {'time_window' : min(time_window, 5)}
-    result = await _make_request_async("GET", url, params=params)
-    alerts = {}
-    if result['success']:
-        alerts = result['data']
-    else:
-        logger.error(f"Failed to get Suricata fast alerts: {result['error']}")
-    return {'security_events' : alerts}
+#     Returns:
+#         Dict with Suricata fast alerts data
+#     """
+#     url = f"{SURICATA_URL}/fastlog"
+#     params = {'time_window' : min(time_window, 5)}
+#     result = await _make_request_async("GET", url, params=params)
+#     alerts = {}
+#     if result['success']:
+#         alerts = result['data']
+#     else:
+#         logger.error(f"Failed to get Suricata fast alerts: {result['error']}")
+#     return {'security_events' : alerts}
 
 # Health Check Functions
 def check_services_health() -> Dict[str, Any]:
@@ -101,7 +101,7 @@ def get_docker_containers() -> Dict[str, Any]:
                 if network_config.get('IPAddress'):
                     ip_address = network_config.get('IPAddress')
                     break
-            if ip_address in ['192.168.100.2', '192.168.200.2', '172.20.0.11'] or container.name in ['cve-2021-22205-redis-1', 'cve-2021-22205-postgresql-1', 'suricata', 'cve-2021-22205-gitlab-1']:
+            if ip_address in ['192.168.100.2', '192.168.200.2', '172.20.0.11'] or container.name in ['cve-2021-22205-redis-1', 'cve-2021-22205-postgresql-1', 'suricata', 'cve-2021-22205-gitlab-1', 'WinBoat']:
                 continue # Skip the firewall and attacker containers and backend containers
 
             info = {

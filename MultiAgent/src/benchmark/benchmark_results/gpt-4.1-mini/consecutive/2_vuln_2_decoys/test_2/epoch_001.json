@@ -1,0 +1,74 @@
+{
+  "epoch_number": 1,
+  "start_time": 1762360070.2950304,
+  "end_time": 1762360100.1554368,
+  "phase_timings": {
+    "initialization": 1762360070.2950547,
+    "attack_execution": 1762360070.3109982,
+    "monitoring_accumulation": 1762360087.4062748,
+    "agent_analysis": 1762360092.4076796,
+    "firewall_update_wait": 1762360098.137946,
+    "metrics_collection": 1762360100.1410332,
+    "epoch_complete": 1762360100.1543262
+  },
+  "services_detected": [],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [
+    {
+      "rules_added_current_epoch": "ALLOW 192.168.100.0/24 -> 172.20.0.5 (tcp)"
+    },
+    {
+      "rules_added_current_epoch": "ALLOW 172.20.0.5 -> 192.168.100.0/24 (tcp)"
+    }
+  ],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.5",
+    "service": "cve-2014-6271-web-1",
+    "current_level": 0,
+    "epoch": 1
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [],
+    "interesting": []
+  },
+  "service_epoch_context": [],
+  "lockdown_activated": false
+}

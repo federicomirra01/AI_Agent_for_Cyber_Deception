@@ -1,10 +1,10 @@
 from langchain_core.messages import AIMessage
 from configuration import state
 from prompts import firewall_executor_prompt
-from .node_utils import OPEN_AI_KEY, POLITO_CLUSTER_KEY, POLITO_URL
+from .node_utils import OPEN_AI_KEY
 from tools import firewall_tools
 import logging
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field
 from typing import Union, List
 import instructor
 import json
@@ -58,61 +58,14 @@ async def firewall_executor(state:state.AgentState, config):
 
     try:
         response = StructuredOutput(reasoning="")
-        if '5' in model_name:
-            valid_json = False
-            while(not valid_json):
-                logger.info(f"Using gpt5 minimal effort")
-                schema = StructuredOutput.model_json_schema()
-                client = OpenAI()
-                raw = client.responses.create( 
-                    model="gpt-5",
-                    temperature=0.3,
-                    input=[messages], # type: ignore
-                    reasoning={"effort":"minimal"},
-                    
-                )
-                content = raw.output_text
-                try:
-                    response = StructuredOutput.model_validate_json(content)
-                    valid_json = True
-                except ValidationError as e:
-                    logger.error(f"Schema validation failed: \n{e}")
-                    response = StructuredOutput(reasoning="")
-            return 
-        elif "4.1" in model_name:
-            agent = instructor.from_openai(OpenAI(api_key=OPEN_AI_KEY))
-            response: StructuredOutput = agent.chat.completions.create(
-                model=model_name,
-                response_model=StructuredOutput,
-                temperature=0.3,
-                messages=messages # type: ignore
-            )
-        elif "llama"in model_name:
-            agent = OpenAI(api_key=POLITO_CLUSTER_KEY, base_url=POLITO_URL)
-            response_open = agent.chat.completions.create(
-                model=model_name,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": "StructuredOutput",
-                        "schema": StructuredOutput.model_json_schema()
-                    }
-                },
-                temperature=0.3,
-                messages=messages # type: ignore
-            )
-            raw = response_open.choices[0].message.content 
-
-            logger.info(f"Response: {raw}")
-            
-            try:
-                data = json.loads(raw) # type: ignore
-                response = StructuredOutput(**data)
-            except (json.JSONDecodeError, ValidationError) as e:
-                print("Error parsing or validating output:", e)
-                print("Raw output:", raw)
-                raise
-
+    
+        agent = instructor.from_openai(OpenAI(api_key=OPEN_AI_KEY))
+        response: StructuredOutput = agent.chat.completions.create(
+            model=model_name,
+            response_model=StructuredOutput,
+            temperature=0.3,
+            messages=messages # type: ignore
+        )
         message = f"Reasoning:" + str(response.reasoning)
         message += f"\nAction: {str(response.action)}"
         message = AIMessage(content=message)
