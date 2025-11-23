@@ -1,0 +1,133 @@
+{
+  "epoch_number": 6,
+  "start_time": 1761672376.1473095,
+  "end_time": 1761672531.0529761,
+  "phase_timings": {
+    "initialization": 1761672376.1473258,
+    "attack_execution": 1761672376.1572576,
+    "monitoring_accumulation": 1761672398.002469,
+    "agent_analysis": 1761672403.0030859,
+    "firewall_update_wait": 1761672529.0377572,
+    "metrics_collection": 1761672531.0389426,
+    "epoch_complete": 1761672531.052047
+  },
+  "services_detected": [
+    "HTTP(172.20.0.10:80)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.10",
+    "service": "cve-2021-22205-gitlab-1-proxy",
+    "current_level": 25,
+    "epoch": 6
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 0,
+      "level_new": 25,
+      "changed": true,
+      "evidence_quotes": [
+        "SCAN"
+      ]
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 0,
+      "level_new": 0,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "SCAN",
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "SCAN",
+              "PORT SCAN"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      }
+    ],
+    "interesting": []
+  },
+  "service_epoch_context": [
+    {
+      "service_id": "gitlab:172.20.0.10:80",
+      "service": "gitlab",
+      "host": "172.20.0.10",
+      "port": "80",
+      "url": "http://172.20.0.10:80",
+      "version": "13.12.3",
+      "first_exposed_epoch": 6,
+      "local_epoch": 1,
+      "allowed_phase": "initial-access/rce",
+      "rotation_attempt_prob": 1,
+      "attempted": [
+        true,
+        1.0
+      ]
+    }
+  ],
+  "lockdown_activated": false
+}

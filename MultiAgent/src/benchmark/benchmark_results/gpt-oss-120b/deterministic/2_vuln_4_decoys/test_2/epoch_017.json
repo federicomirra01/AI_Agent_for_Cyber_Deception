@@ -1,0 +1,221 @@
+{
+  "epoch_number": 17,
+  "start_time": 1761584807.2393327,
+  "end_time": 1761584887.471231,
+  "phase_timings": {
+    "initialization": 1761584807.2393448,
+    "attack_execution": 1761584807.250756,
+    "monitoring_accumulation": 1761584822.6351984,
+    "agent_analysis": 1761584827.6362948,
+    "firewall_update_wait": 1761584885.456601,
+    "metrics_collection": 1761584887.457686,
+    "epoch_complete": 1761584887.470465
+  },
+  "services_detected": [
+    "HTTP(172.20.0.5:80)"
+  ],
+  "services_successfully_exploited": [],
+  "exploits_attempted": [],
+  "flags_captured": [],
+  "attack_success_rate": 0.0,
+  "firewall_rules_added": [],
+  "firewall_rules_removed": [],
+  "selected_container": {
+    "ip": "172.20.0.4",
+    "service": "cve-2015-5254-activemq-1",
+    "current_level": 25,
+    "epoch": 17
+  },
+  "containers_exploitation": [
+    {
+      "ip": "172.20.0.8",
+      "service": "cve-2024-36401-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.30",
+      "service": "cve-2013-4547-nginx-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.5",
+      "service": "cve-2014-6271-web-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.4",
+      "service": "cve-2015-5254-activemq-1",
+      "level_prev": 25,
+      "level_new": 25,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.10",
+      "service": "cve-2021-22205-gitlab-1-proxy",
+      "level_prev": 100,
+      "level_new": 100,
+      "changed": false,
+      "evidence_quotes": []
+    },
+    {
+      "ip": "172.20.0.3",
+      "service": "s2-057-struts2-1",
+      "level_prev": 100,
+      "level_new": 100,
+      "changed": false,
+      "evidence_quotes": []
+    }
+  ],
+  "inferred_attack_graph": {
+    "edges": [
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.8",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.30",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.5",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.4",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          }
+        ],
+        "current_phase": "scan",
+        "vector": "scan"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.10",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "inferred from later phase: cat /home/ctf/user.txt"
+            ]
+          },
+          {
+            "phase": "data-exfil-user",
+            "evidence_quotes": [
+              "cat /home/ctf/user.txt"
+            ]
+          },
+          {
+            "phase": "privilege-escalation",
+            "evidence_quotes": [
+              "inferred from later phase: cat /root/root.txt"
+            ]
+          },
+          {
+            "phase": "data-exfil-root",
+            "evidence_quotes": [
+              "cat /root/root.txt"
+            ]
+          }
+        ],
+        "current_phase": "data-exfil-root",
+        "vector": "data-exfil-root"
+      },
+      {
+        "from": "192.168.100.2",
+        "to": "172.20.0.3",
+        "phases": [
+          {
+            "phase": "scan",
+            "evidence_quotes": [
+              "POSSBL PORT SCAN (NMAP -sS)"
+            ]
+          },
+          {
+            "phase": "initial-access/rce",
+            "evidence_quotes": [
+              "inferred from later phase: cat /root/root.txt"
+            ]
+          },
+          {
+            "phase": "privilege-escalation",
+            "evidence_quotes": [
+              "inferred from later phase: cat /root/root.txt"
+            ]
+          },
+          {
+            "phase": "data-exfil-root",
+            "evidence_quotes": [
+              "cat /root/root.txt"
+            ]
+          }
+        ],
+        "current_phase": "data-exfil-root",
+        "vector": "data-exfil-root"
+      }
+    ],
+    "interesting": [
+      {
+        "ip": "172.20.0.10",
+        "service": "cve-2021-22205-gitlab-1-proxy"
+      },
+      {
+        "ip": "172.20.0.3",
+        "service": "s2-057-struts2-1"
+      }
+    ]
+  },
+  "service_epoch_context": [],
+  "lockdown_activated": false
+}
