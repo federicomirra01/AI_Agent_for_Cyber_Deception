@@ -16,7 +16,6 @@ async def network_gathering(state: state.AgentState, config) -> Dict[str, Any]:
     """
     time_window = config.get("configurable", {}).get("time_window", "0")
     time_window = int(time_window)
-    alerts_type = config.get("configurable", {}).get("prompt", "Default")
     memory = config.get("configurable", {}).get("store")
     last_iteration = memory.get_recent_iterations(limit=1)
     last_summary = {}
@@ -26,11 +25,8 @@ async def network_gathering(state: state.AgentState, config) -> Dict[str, Any]:
         last_exposed = last_iteration[0].value.get("currently_exposed", {})
 
 
-    # Call tools directly
-    if "fast" in alerts_type:
-        alerts_response = await network_tools.get_fast_alerts(time_window=time_window)
-    else:
-        alerts_response = await network_tools.get_alerts(time_window=time_window)
+    
+    alerts_response = await network_tools.get_alerts(time_window=time_window)
 
     containers_response = network_tools.get_docker_containers()
     firewall_response = await firewall_tools.get_firewall_rules()
