@@ -40,7 +40,7 @@ To evaluate system performance (inference accuracy and engagement efficiency), r
 ```
 graph.ipynb
 ```
-## 📂 Repository Structure
+## Repository Structure
 
 * **`MultiAgent/`**: The core AI reasoning engine.
 * `src/nodes/`: Agents for network analysis, exploitation inference, and exposure management.
@@ -55,7 +55,7 @@ graph.ipynb
 
 
 
-## 🛠 Prerequisites
+## Prerequisites
 
 * **Docker & Docker Compose**
 * **Python 3.9+**
@@ -64,3 +64,4 @@ graph.ipynb
 ---
 
 *Developed as part of the thesis: "Towards Autonomous Cyber Deception: An AI Agent for Dynamic Honeynet Management."*
+
