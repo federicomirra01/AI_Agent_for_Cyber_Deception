@@ -1,59 +1,66 @@
-AI Agent for Cyber Deception: Dynamic Honeynet Management
+# AI Agent for Cyber Deception
 
-This repository contains the source code and benchmarking infrastructure for an autonomous AI-driven system designed to manage dynamic honeynets. Based on the thesis "Towards Autonomous Cyber Deception: An AI Agent for Dynamic Honeynet Management", the project aims to replace static host exposure with an adaptive, agentic architecture that maximizes threat intelligence gain.
-Project Overview
+This repository contains an autonomous multi-agent system designed for **Dynamic Honeynet Management**. Based on the research "Towards Autonomous Cyber Deception," the system uses AI agents to monitor network traffic via Suricata IDS, infer attacker progress, and dynamically adjust host exposure to maximize threat intelligence while minimizing risk.
 
-Traditional honeypots are often static and easily bypassed by sophisticated attackers. This system utilizes a multi-agent AI architecture to autonomously:
+## Quick Start
 
-    Analyze Traffic: Processes real-time Intrusion Detection System (IDS) alerts from Suricata to understand attacker intent.
+Follow these steps to deploy the lab environment and run the autonomous agent.
 
-    Infer Attack Graphs: Accurately maps out compromised hosts and exploited services with up to 96% accuracy.
+### 1. Launch the Core Infrastructure
 
-    Shape the Attack Surface: Dynamically adjusts host exposure and deploys decoys based on the attacker's progress to sustain engagement.
+Deploy the firewall (IDS/IPS) and the attacker simulation environment.
 
-    Optimize Resources: Minimizes unnecessary exposure of vulnerable services while maximizing information gain.
+**Start the Attacker and Firewall:**
 
-Repository Structure
+```bash
+# Launch the Attacker Container
+cd Benchmark/attackerContainer
+docker-compose up -d
 
-The repository is organized into two main sub-systems:
-1. MultiAgent System (/MultiAgent)
+# Launch the Firewall/IDS Container
+cd ../firewallContainer
+docker-compose up -d
 
-The core reasoning engine built using Python and orchestration frameworks like LangGraph.
+```
 
-    src/nodes/: Individual agents responsible for network gathering, exposure management, and exploitation inference.
+### 2. Deploy Vulnerable Targets
 
-    src/prompts/: Instructions and reasoning logic for the AI agents.
+Use the deployment scripts to populate the internal network with vulnerable services and decoys.
 
-    src/benchmark/: Tools to run simulations and collect performance metrics such as Exposure Efficiency.
+```bash
+# Deploy all vulnerable containers and decoys
+cd ../deploy
+bash all_exploitables.sh
 
-2. Benchmarking Environment (/Benchmark)
+```
 
-A containerized infrastructure to simulate real-world attacks.
+### 3. Execute Benchmarks
 
-    firewallContainer/: A Suricata-based IPS that serves as the "eyes" of the system, providing alerts to the agents.
+To evaluate system performance (inference accuracy and engagement efficiency), run the automated benchmarking suite using the jupyter notebook
+```
+graph.ipynb
+```
+## 📂 Repository Structure
 
-    attackerContainer/: Automated scripts that execute Proof of Concepts (PoCs) for known CVEs (e.g., Struts, GitLab, Docker RCE).
+* **`MultiAgent/`**: The core AI reasoning engine.
+* `src/nodes/`: Agents for network analysis, exploitation inference, and exposure management.
+* `src/benchmark/`: Scripts for running automated simulations and performance reporting.
 
-    vulnerableContainers/: A library of vulnerable targets and deception decoys (CVE-2018-12613, CVE-2021-22205, etc.) used to populate the simulation network.
 
-    deploy/: Scripts for initializing, restarting, and cleaning up the simulation environment.
+* **`Benchmark/`**: The containerized lab environment.
+* `attackerContainer/`: Automated scripts simulating real-world RCE exploits (CVE-2021-22205, etc.).
+* `firewallContainer/`: Suricata-based monitoring and routing.
+* `vulnerableContainers/`: A library of target services and deception decoys.
+* `deploy/`: Orchestration scripts for network setup.
 
-Technology Stack
 
-    Logic & Orchestration: Python, LangGraph, LangChain.
 
-    Virtualization: Docker & Docker Compose.
+## 🛠 Prerequisites
 
-    Security Monitoring: Suricata IDS/IPS.
+* **Docker & Docker Compose**
+* **Python 3.9+**
+* **API Configuration**: Rename `.env.example` to `.env` in the `MultiAgent/` directory and add your LLM API keys (e.g., OpenAI).
 
-    Attacker Simulation: Python-based PoC exploits for various CVEs.
+---
 
-Getting Started
-
-    Environment Setup: Ensure Docker and Python 3.x are installed.
-
-    Infrastructure Initialization: Use scripts in Benchmark/deploy/ to start the firewall and target network.
-
-    Agent Activation: Run the multi-agent graph located in MultiAgent/src/graph.py to begin autonomous monitoring and management.
-
-    Benchmarking: Execute MultiAgent/src/benchmark/benchmark.py to run automated attack scenarios and generate reports.
+*Developed as part of the thesis: "Towards Autonomous Cyber Deception: An AI Agent for Dynamic Honeynet Management."*
