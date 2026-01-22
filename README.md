@@ -59,9 +59,10 @@ graph.ipynb
 
 * **Docker & Docker Compose**
 * **Python 3.9+**
-* **API Configuration**: Rename `.env.example` to `.env` in the `MultiAgent/` directory and add your LLM API keys (e.g., OpenAI).
+* **API Configuration**: Add `.env` in the `MultiAgent/` directory and add your LLM API keys (e.g., OpenAI).
 
 ---
 
-*Developed as part of the thesis: "Towards Autonomous Cyber Deception: An AI Agent for Dynamic Honeynet Management."*
+*Developed as part of the thesis: "Towards Autonomous Cyber Deception: An AI Agent for Dynamic Honeynet Management." (https://webthesis.biblio.polito.it/38697/)*
+
 
