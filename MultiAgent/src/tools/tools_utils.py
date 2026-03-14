@@ -2,7 +2,7 @@ import requests
 from typing import Dict, Any
 import asyncio
 import aiohttp
-REQUEST_TIMEOUT = 3
+REQUEST_TIMEOUT = 30
 
 
 async def _make_request_async(method: str, url: str, **kwargs) -> Dict[str, Any]:

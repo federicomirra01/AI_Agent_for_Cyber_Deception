@@ -5,6 +5,9 @@ services:
       dockerfile: DockerFile
     container_name: firewall_router
     hostname: firewall_router
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       thesis_net:
         ipv4_address: 172.20.0.254    # Gateway IP for honeypot network
@@ -52,17 +55,20 @@ services:
       - ./suricata/suricata.yaml:/etc/suricata/suricata.yaml
       - ./suricata/suricata_rules/threshold.config:/etc/suricata/threshold.config
       - ./suricata/suricata_rules/local.rules:/var/lib/suricata/rules/local.rules
+      - ./suricata/suricata_rules/suricata.rules:/var/lib/suricata/rules/suricata.rules
+      - ./suricata/suricata_rules/classification.config:/var/lib/suricata/rules/classification.config
       - ./suricata/suricata_logs:/var/log/suricata
+      - ./suricata/run:/var/run/suricata  # Add this line
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    command: -i eth0 
+    command: "suricata -i eth0"
     cap_add:
       - NET_ADMIN
       - SYS_NICE
     depends_on:
-      firewall:
-        condition: service_started
-
+        firewall:
+            condition: service_started
+    restart: unless-stopped
 networks:
   attacker_net:
     external: true

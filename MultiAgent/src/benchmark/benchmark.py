@@ -484,7 +484,7 @@ class BenchmarkOrchestrator:
         
         self.logger.info(f"=== Phase: {phase_name.upper()} ===")
     
-    def run_epoch(self, epoch_num: int) -> EpochMetrics:
+    async def run_epoch(self, epoch_num: int) -> EpochMetrics:
         """Execute a single benchmark epoch"""
         self.logger.info(f"\n{'='*60}")
         self.logger.info(f"EPOCH {epoch_num} STARTING")
@@ -519,14 +519,14 @@ class BenchmarkOrchestrator:
             # Phase 3: Wait for monitoring data
             self._phase_transition(BenchmarkPhase.MONITOR_WAIT)
             self.logger.info(f"Accumulating monitoring data for {self.config.monitor_accumulation_wait}s...")
-            time.sleep(self.config.monitor_accumulation_wait)
+            await asyncio.sleep(self.config.monitor_accumulation_wait)
             
             # Phase 4: Execute agent
             self._phase_transition(BenchmarkPhase.AGENT_ANALYSIS)
             if self.agent_executor:
                 agent_result = self.agent_executor(epoch_num)
                 if asyncio.iscoroutine(agent_result):
-                    asyncio.run(agent_result)
+                    await agent_result
                 agent_metrics = self.metrics_collector.parse_agent_metrics()
                 
                 # Update epoch metrics
@@ -542,7 +542,7 @@ class BenchmarkOrchestrator:
             # Phase 5: Wait for firewall updates
             self._phase_transition(BenchmarkPhase.FIREWALL_UPDATE)
             self.logger.info(f"Waiting {self.config.firewall_update_wait}s for firewall updates...")
-            time.sleep(self.config.firewall_update_wait)
+            await asyncio.sleep(self.config.firewall_update_wait)
             
             # Phase 6: Collect metrics
             self._phase_transition(BenchmarkPhase.METRICS_COLLECT)
@@ -622,7 +622,7 @@ class BenchmarkRunner:
         """Set the agent execution function"""
         self.orchestrator.set_agent_executor(executor)
     
-    def run(self, agent_executor: Optional[Callable] = None) -> Dict[str, Any]:
+    async def run(self, agent_executor: Optional[Callable] = None) -> Dict[str, Any]:
         """Run the complete benchmark"""
         if agent_executor:
             self.set_agent_executor(agent_executor)
@@ -640,7 +640,7 @@ class BenchmarkRunner:
                 if self.orchestrator.should_stop:
                     break
                 
-                epoch_metrics = self.orchestrator.run_epoch(epoch_num)
+                epoch_metrics = await self.orchestrator.run_epoch(epoch_num)
                 self.orchestrator.epochs_data.append(epoch_metrics)
                 
                 if not self.orchestrator.should_continue(epoch_metrics):
@@ -651,7 +651,7 @@ class BenchmarkRunner:
                     self.orchestrator.logger.info(
                         f"Waiting {self.config.between_epoch_wait}s before next epoch..."
                     )
-                    time.sleep(self.config.between_epoch_wait)
+                    await asyncio.sleep(self.config.between_epoch_wait)
             
             # Generate final report
             self.results = self._generate_report()

@@ -37,29 +37,30 @@ class FirewallManager:
         except Exception as e:
             logger.error(f"Command execution failed: {e}")
             return False, "", str(e)
-
     def add_allow_rule(self, source_ip, dest_ip, port=None, protocol='tcp'):
-        """Add rule to allow traffic"""
+        """Add rule to allow traffic - Updated for nf_tables compatibility"""
         if port:
-            rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} --dport {port} -j ACCEPT"
+            # Place protocol and dport immediately following the chain
+            rule = f"iptables -I FORWARD -p {protocol} -s {source_ip} -d {dest_ip} --dport {port} -j ACCEPT"
         else:
-            rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} -j ACCEPT"
+            rule = f"iptables -I FORWARD -p {protocol} -s {source_ip} -d {dest_ip} -j ACCEPT"
 
         success, stdout, stderr = self.execute_command(rule)
         if success:
             logger.info(f"Added ALLOW rule: {source_ip} -> {dest_ip}:{port}")
             self.save_rules()
         else:
+            # This will show the specific error (like "unknown option") in your logs
             logger.error(f"Failed to add ALLOW rule: {stderr}")
 
         return success
 
     def add_block_rule(self, source_ip, dest_ip, port=None, protocol='tcp'):
-        """Add rule to block traffic"""
+        """Add rule to block traffic - Updated for nf_tables compatibility"""
         if port:
-            rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} --dport {port} -j DROP"
+            rule = f"iptables -I FORWARD -p {protocol} -s {source_ip} -d {dest_ip} --dport {port} -j DROP"
         else:
-            rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} -j DROP"
+            rule = f"iptables -I FORWARD -p {protocol} -s {source_ip} -d {dest_ip} -j DROP"
 
         success, stdout, stderr = self.execute_command(rule)
         if success:
@@ -69,6 +70,38 @@ class FirewallManager:
             logger.error(f"Failed to add BLOCK rule: {stderr}")
 
         return success
+
+    # def add_allow_rule(self, source_ip, dest_ip, port=None, protocol='tcp'):
+    #     """Add rule to allow traffic"""
+    #     if port:
+    #         rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} --dport {port} -j ACCEPT"
+    #     else:
+    #         rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} -j ACCEPT"
+
+    #     success, stdout, stderr = self.execute_command(rule)
+    #     if success:
+    #         logger.info(f"Added ALLOW rule: {source_ip} -> {dest_ip}:{port}")
+    #         self.save_rules()
+    #     else:
+    #         logger.error(f"Failed to add ALLOW rule: {stderr}")
+
+    #     return success
+
+    # def add_block_rule(self, source_ip, dest_ip, port=None, protocol='tcp'):
+    #     """Add rule to block traffic"""
+    #     if port:
+    #         rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} --dport {port} -j DROP"
+    #     else:
+    #         rule = f"iptables -I FORWARD -s {source_ip} -d {dest_ip} -p {protocol} -j DROP"
+
+    #     success, stdout, stderr = self.execute_command(rule)
+    #     if success:
+    #         logger.info(f"Added BLOCK rule: {source_ip} -> {dest_ip}:{port}")
+    #         self.save_rules()
+    #     else:
+    #         logger.error(f"Failed to add BLOCK rule: {stderr}")
+
+    #     return success
 
     def remove_rules(self, rule_numbers):
         """ Remove multiple rules by their numbers

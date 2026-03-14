@@ -169,6 +169,8 @@ app-layer:
       enabled: yes
     dnp3:
       enabled: yes
+      detection-ports:
+        dp: 20000
     enip:
       enabled: yes
     arp:
@@ -279,6 +281,9 @@ spm-algo: auto
 
 # Minimal decoder settings
 decoder:
+  decoder:
+    ipv4:
+      trunc-pkt: no
   teredo:
     enabled: no
   vxlan:
@@ -291,6 +296,10 @@ default-rule-path: /var/lib/suricata/rules
 rule-files:
   - suricata.rules
   - local.rules
+
+unix-command:
+  enabled: yes
+  filename: /var/run/suricata/suricata-command.socket
 
 classification-file: /etc/suricata/classification.config
 reference-config-file: /etc/suricata/reference.config

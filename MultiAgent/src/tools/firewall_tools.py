@@ -1,6 +1,6 @@
 import asyncio
 from typing import Dict, List, Any
-from .tools_utils import _make_request_async, _make_request
+from tools_utils import _make_request_async, _make_request
 import logging
 
 # Configure logging

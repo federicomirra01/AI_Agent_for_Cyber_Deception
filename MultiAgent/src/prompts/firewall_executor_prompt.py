@@ -13,11 +13,8 @@ INITIAL FIREWALL SETTINGS (do NOT remove or modify these rules)
 Chain FORWARD (policy DROP)
 num  target     prot opt source               destination         
 1    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
-2    ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0           
-3    ACCEPT     all  --  172.20.0.0/24        172.20.0.0/24       
-4    DROP       all  --  192.168.100.0/24     172.20.0.0/24       
-5    DROP       all  --  172.20.0.0/24        192.168.100.0/24    
-6    LOG        all  --  0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "FIREWALL-DROP: "
+2    BLOCK_TRAFFIC  all  --  192.168.100.0/24     172.20.0.0/24       
+3    BLOCK_TRAFFIC  all  --  172.20.0.0/24        192.168.100.0/24
     
 To expose a container you only need to add the bidirectional allow flow between the attacker IP (or subnet) and the container IP — without changing the initial posture or baseline rules.
 

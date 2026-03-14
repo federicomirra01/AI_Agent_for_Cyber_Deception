@@ -1,7 +1,7 @@
 import docker
 from typing import Dict, List, Any
-from .tools_utils import _make_request_async, _make_request
-from .firewall_tools import SURICATA_URL, FIREWALL_URL
+from tools_utils import _make_request_async, _make_request
+from firewall_tools import SURICATA_URL, FIREWALL_URL
 import logging
 
 # Configure logging

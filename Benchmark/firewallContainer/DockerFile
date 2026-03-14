@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
     procps \
     && rm -rf /var/lib/apt/lists/*
 
+RUN update-alternatives --set iptables /usr/sbin/iptables-nft && \
+    update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
+
 # Install Python dependencies
 RUN pip3 install flask
 
